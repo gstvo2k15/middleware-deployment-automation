@@ -5,3 +5,4 @@ terraform.tfvars
 terraform.tfvars.json
 terraform.tfvars.tf
 .terraform.lock.hcl
+.terraform.lock.hcl.json
