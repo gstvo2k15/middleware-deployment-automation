@@ -1,4 +1,7 @@
-variable "auth_url" {}
+variable "os_url" {
+  description = "Main openstack URL access"
+  type        = string
+}
 variable "tenant_name" {}
 variable "user_name" {}
 variable "password" {}
