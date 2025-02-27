@@ -1,6 +1,7 @@
-variable "os_url" {
-  description = "Main openstack URL access"
+variable "auth_url" {
+  description = "Main openstack GUI url"
   type        = string
+  default     = "https://openstack.ubuntu22vm1.duckdns.org:5000/v3"
 }
 variable "tenant_name" {}
 variable "user_name" {}
