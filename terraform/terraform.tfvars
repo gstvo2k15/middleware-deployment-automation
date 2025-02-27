@@ -1,0 +1,5 @@
+auth_url    = "https://openstack.ubuntu22vm1.duckdns.org:5000/v3"
+tenant_name = "admin"
+user_name   = "admin"
+password    = "tu_contraseña_secreta"
+region      = "RegionOne"
