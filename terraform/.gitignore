@@ -6,3 +6,5 @@ terraform.tfvars.json
 terraform.tfvars.tf
 .terraform.lock.hcl
 .terraform.lock.hcl.json
+id_rsa
+id_rsa.pub
