@@ -8,3 +8,4 @@ terraform.tfvars.tf
 .terraform.lock.hcl.json
 id_rsa
 id_rsa.pub
+.terraform.tfstate.lock.info
