@@ -1,6 +1,7 @@
 ---
 - name: Configure Apache JSON Logging for ELK
-  template:
+  ansible.builtin.template:
     src: logging.conf.j2
     dest: /etc/apache2/apache2.conf
+    mode: "0o644"
   notify: Restart Apache

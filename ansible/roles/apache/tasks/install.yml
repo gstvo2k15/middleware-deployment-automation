@@ -1,24 +1,24 @@
 ---
 - name: Detect OS family
-  set_fact:
+  ansible.builtin.set_fact:
     os_family: "{{ ansible_os_family }}"
     os_version: "{{ ansible_distribution_major_version }}"
 
 - name: Install Apache (Ubuntu)
-  apt:
+  ansible.builtin.apt:
     name: apache2
     state: present
     update_cache: true
   when: ansible_os_family == "Debian"
 
 - name: Install Apache (Rocky)
-  dnf:
+  ansible.builtin.dnf:
     name: httpd
     state: present
   when: ansible_os_family == "RedHat"
 
 - name: Ensure Apache is started and enabled
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
     state: started
     enabled: true

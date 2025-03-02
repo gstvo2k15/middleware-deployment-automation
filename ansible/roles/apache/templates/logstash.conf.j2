@@ -1,6 +1,6 @@
 input {
   beats {
-    port => {{ logstash_port }}
+    port => {{ apache_logstash_port }}
   }
 }
 
@@ -12,9 +12,9 @@ filter {
 
 output {
   elasticsearch {
-    hosts => ["{{ elk_server }}"]
-    user => "{{ elk_username }}"
-    password => "{{ elk_password }}"
+    hosts => ["{{ apache_elk_server }}"]
+    user => "{{ apache_elk_username }}"
+    password => "{{ apache_elk_password }}"
     ssl => true
     index => "apache-logs-%{+YYYY.MM.dd}"
   }

@@ -6,11 +6,11 @@ apache_fail2ban_enabled: true
 apache_logging_enabled: true
 
 # ELK & Logstash Configuration
-elk_enabled: true
-elk_server: "https://elk-server:9200"
-elk_username: "elastic"
-elk_password: "password123"
-filebeat_enabled: true
-logstash_enabled: true
-logstash_host: "logstash-server"
-logstash_port: 5044
+apache_elk_enabled: true
+apache_elk_server: "https://elk-server:9200"
+apache_elk_username: "elastic"
+apache_elk_password: "password123"
+apache_filebeat_enabled: true
+apache_logstash_enabled: true
+apache_logstash_host: "logstash-server"
+apache_logstash_port: 5044

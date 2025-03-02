@@ -1,18 +1,18 @@
 ---
 - name: Install firewall packages on Ubuntu
-  apt:
+  ansible.builtin.apt:
     name: ufw
     state: present
   when: ansible_os_family == "Debian"
 
 - name: Install firewall packages on Rocky
-  dnf:
+  ansible.builtin.dnf:
     name: firewalld
     state: present
   when: ansible_os_family == "RedHat"
 
 - name: Configure UFW on Ubuntu (allow HTTP, HTTPS, SSH)
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp
@@ -23,12 +23,12 @@
   when: ansible_os_family == "Debian"
 
 - name: Enable UFW
-  ufw:
+  community.general.ufw:
     state: enabled
   when: ansible_os_family == "Debian"
 
 - name: Configure Firewalld on Rocky
-  firewalld:
+  ansible.posix.firewalld:
     service: "{{ item }}"
     permanent: true
     state: enabled
@@ -40,7 +40,6 @@
   when: ansible_os_family == "RedHat"
 
 - name: Reload Firewalld
-  firewalld:
-    state: reloaded
-    immediate: true
+  ansible.builtin.command: firewall-cmd --reload
+  changed_when: false
   when: ansible_os_family == "RedHat"

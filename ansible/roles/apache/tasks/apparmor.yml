@@ -1,21 +1,24 @@
 ---
 - name: Ensure AppArmor is installed
-  package:
+  ansible.builtin.package:
     name: apparmor
     state: present
   when: ansible_os_family == "Debian"
 
 - name: Enforce AppArmor profile for Apache
-  command: aa-enforce /etc/apparmor.d/usr.sbin.apache2
+  ansible.builtin.command: aa-enforce /etc/apparmor.d/usr.sbin.apache2
   when: ansible_os_family == "Debian"
+  changed_when: false
 
 # NOTE: Rocky Linux uses SELinux by default, so either skip or handle SELinux there.
 - name: Install policycoreutils (SELinux) for Rocky
-  package:
+  ansible.builtin.package:
     name: policycoreutils
     state: present
   when: ansible_os_family == "RedHat"
+  changed_when: false
 
 - name: Enable HTTPD can network connect if SELinux is enforced
-  command: setsebool -P httpd_can_network_connect on
+  ansible.builtin.command: setsebool -P httpd_can_network_connect on
   when: ansible_os_family == "RedHat"
+  changed_when: false
