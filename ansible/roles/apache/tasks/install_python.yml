@@ -1,6 +1,6 @@
 ---
 - name: Install Python 3.9 on Rocky Linux 8
-  when: ansible_os_family == "RedHat" and ansible_distribution_version is version("8", "==")
+  when: ansible_os_family == "Rocky" and ansible_distribution_version is version("8", "==")
   block:
     - name: Install Python 3.9
       ansible.builtin.dnf:

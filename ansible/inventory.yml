@@ -14,7 +14,7 @@ all:
             rocky_8:
               ansible_host: 192.168.1.131
               ansible_user: root
-              ansible_os_family: RedHat
+              ansible_os_family: Rocky
               ansible_distribution_version: "8.10"
               ansible_python_interpreter: /usr/bin/python3.9
 
@@ -30,6 +30,6 @@ all:
             rocky_9:
               ansible_host: 192.168.1.121
               ansible_user: root
-              ansible_os_family: RedHat
+              ansible_os_family: Rocky
               ansible_distribution_version: "9.5"
               ansible_python_interpreter: /usr/bin/python3.9

@@ -19,4 +19,4 @@
     dest: "/etc/httpd/conf.d/security.conf"
     state: link
   notify: Restart Apache
-  when: ansible_os_family == "RedHat" and ansible_distribution_version in ["8", "9"]
+  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]

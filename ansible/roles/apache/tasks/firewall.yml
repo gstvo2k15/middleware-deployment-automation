@@ -9,7 +9,7 @@
   ansible.builtin.dnf:
     name: firewalld
     state: present
-  when: ansible_os_family == "RedHat" and ansible_distribution_version in ["8", "9"]
+  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
 
 - name: Configure UFW on Ubuntu (allow HTTP, HTTPS, SSH)
   community.general.ufw:
@@ -37,9 +37,9 @@
     - "ssh"
     - "http"
     - "https"
-  when: ansible_os_family == "RedHat" and ansible_distribution_version in ["8", "9"]
+  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
 
 - name: Reload Firewalld
   ansible.builtin.command: firewall-cmd --reload
   changed_when: false
-  when: ansible_os_family == "RedHat" and ansible_distribution_version in ["8", "9"]
+  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
