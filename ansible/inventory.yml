@@ -8,14 +8,14 @@ all:
               ansible_host: 192.168.1.111
               ansible_user: root
               ansible_os_family: Debian
-              ansible_distribution_version: "22.04"
+              ansible_distribution_major_version: "22.04"
               ansible_python_interpreter: /usr/bin/python3.10
 
             rocky_8:
               ansible_host: 192.168.1.131
               ansible_user: root
               ansible_os_family: Rocky
-              ansible_distribution_version: "8.10"
+              ansible_distribution_major_version: "8.10"
               ansible_python_interpreter: /usr/bin/python3.9
 
         latest_release:
@@ -24,12 +24,12 @@ all:
               ansible_host: 192.168.1.101
               ansible_user: root
               ansible_os_family: Debian
-              ansible_distribution_version: "24.10"
+              ansible_distribution_major_version: "24.10"
               ansible_python_interpreter: /usr/bin/python3.12
 
             rocky_9:
               ansible_host: 192.168.1.121
               ansible_user: root
               ansible_os_family: Rocky
-              ansible_distribution_version: "9.5"
+              ansible_distribution_major_version: "9.5"
               ansible_python_interpreter: /usr/bin/python3.9

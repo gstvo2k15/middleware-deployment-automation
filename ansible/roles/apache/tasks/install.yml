@@ -15,7 +15,7 @@
   ansible.builtin.dnf:
     name: httpd
     state: present
-  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
 
 - name: Ensure Apache is started and enabled
   ansible.builtin.systemd:

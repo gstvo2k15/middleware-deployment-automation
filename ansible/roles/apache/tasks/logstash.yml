@@ -9,7 +9,7 @@
   ansible.builtin.dnf:
     name: logstash
     state: present
-  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
 
 - name: Configure Logstash Pipeline
   ansible.builtin.template:

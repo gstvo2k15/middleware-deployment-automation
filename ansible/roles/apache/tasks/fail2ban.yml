@@ -9,7 +9,7 @@
   ansible.builtin.dnf:
     name: fail2ban
     state: present
-  when: ansible_os_family == "Rocky" and ansible_distribution_version in ["8", "9"]
+  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
 
 - name: Copy Fail2Ban config
   ansible.builtin.copy:

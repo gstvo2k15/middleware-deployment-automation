@@ -1,6 +1,6 @@
 ---
 - name: Apache2 Hardening with ELK & Logstash
-  hosts: apache_servers
+  hosts: latest_release
   become: true
   roles:
     - role: apache

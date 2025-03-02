@@ -1,0 +1,21 @@
+---
+- name: Include Apache hardening tasks
+  ansible.builtin.import_tasks: install.yml
+
+- name: Include firewall settings
+  ansible.builtin.import_tasks: firewall.yml
+
+- name: Include TLS configuration
+  ansible.builtin.import_tasks: tls.yml
+
+- name: Include monitoring setup
+  ansible.builtin.import_tasks: monitoring.yml
+
+- name: Include Fail2ban rules
+  ansible.builtin.import_tasks: fail2ban.yml
+
+- name: Include AppArmor configuration
+  ansible.builtin.import_tasks: apparmor.yml
+
+- name: Include hardening steps
+  ansible.builtin.import_tasks: hardening.yml
