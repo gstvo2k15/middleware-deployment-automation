@@ -1,27 +1,31 @@
 all:
-  hosts:
+  children:
     apache_servers:
-      hosts:
-        ubuntu_24:
-          ansible_host: 192.168.1.101
-          ansible_user: root
-          ansible_os_family: Debian
-          ansible_distribution_version: "24.10"
+      children:
+        long_term_support:
+          hosts:
+            ubuntu_22:
+              ansible_host: 192.168.1.111
+              ansible_user: root
+              ansible_os_family: Debian
+              ansible_distribution_version: "22.04"
 
-        ubuntu_22:
-          ansible_host: 192.168.1.111
-          ansible_user: root
-          ansible_os_family: Debian
-          ansible_distribution_version: "22.04"
+            rocky_8:
+              ansible_host: 192.168.1.131
+              ansible_user: root
+              ansible_os_family: RedHat
+              ansible_distribution_version: "8.10"
 
-        rocky_8:
-          ansible_host: 192.168.1.121
-          ansible_user: root
-          ansible_os_family: RedHat
-          ansible_distribution_version: "8"
+        latest_release:
+          hosts:
+            ubuntu_24:
+              ansible_host: 192.168.1.101
+              ansible_user: root
+              ansible_os_family: Debian
+              ansible_distribution_version: "24.10"
 
-        rocky_9:
-          ansible_host: 192.168.1.131
-          ansible_user: root
-          ansible_os_family: RedHat
-          ansible_distribution_version: "9"
+            rocky_9:
+              ansible_host: 192.168.1.121
+              ansible_user: root
+              ansible_os_family: RedHat
+              ansible_distribution_version: "9.5"
