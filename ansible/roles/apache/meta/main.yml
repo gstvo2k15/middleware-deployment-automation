@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Gustavo Olmo
+  description: "Hardening de Apache2 con Ansible"
+  license: MIT
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - "22.04"
+        - "24.04"
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+dependencies: []
