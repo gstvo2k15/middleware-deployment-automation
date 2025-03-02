@@ -1,0 +1,27 @@
+<IfModule mod_ssl.c>
+<VirtualHost _default_:443>
+    ServerAdmin admin@example.com
+    DocumentRoot /var/www/html
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
+
+    SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+    SSLProtocol -all +TLSv1.2 +TLSv1.3
+    SSLHonorCipherOrder on
+    SSLSessionTickets Off
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+
+    <Directory /var/www/html>
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    ErrorLog  ${APACHE_LOG_DIR}/error_ssl.log
+    CustomLog ${APACHE_LOG_DIR}/access_ssl.log combined
+</VirtualHost>
+</IfModule>

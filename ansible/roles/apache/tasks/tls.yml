@@ -1,0 +1,44 @@
+---
+- name: Enable SSL module (Ubuntu)
+  command: a2enmod ssl
+  notify: Restart Apache
+  when: ansible_os_family == "Debian"
+
+- name: Install Certbot (Ubuntu)
+  apt:
+    name: python3-certbot-apache
+    state: present
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install mod_ssl and Certbot (Rocky)
+  dnf:
+    name:
+      - mod_ssl
+      - certbot
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Copy default-ssl.conf
+  template:
+    src: default-ssl.conf.j2
+    dest: "/etc/{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}/sites-available/default-ssl.conf"
+  notify: Restart Apache
+  when: ansible_os_family == "Debian"
+
+# On Rocky, paths might differ (e.g., /etc/httpd/conf.d/ssl.conf)
+- name: Copy SSL conf for Rocky
+  template:
+    src: default-ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify: Restart Apache
+  when: ansible_os_family == "RedHat"
+
+- name: Obtain Let's Encrypt certificate (Ubuntu)
+  command: certbot --apache --non-interactive --agree-tos -m admin@example.com -d example.com
+  when: ansible_os_family == "Debian"
+
+# For Rocky, use certbot with the httpd plugin or manual config
+- name: Obtain Let's Encrypt certificate (Rocky)
+  command: certbot --apache --non-interactive --agree-tos -m admin@example.com -d example.com
+  when: ansible_os_family == "RedHat"

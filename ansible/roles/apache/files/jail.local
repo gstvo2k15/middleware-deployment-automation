@@ -1,0 +1,5 @@
+[apache]
+enabled = true
+port = http,https
+logpath = /var/log/apache2/error.log
+maxretry = 5

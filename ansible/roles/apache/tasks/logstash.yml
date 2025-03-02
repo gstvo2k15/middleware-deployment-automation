@@ -1,0 +1,24 @@
+---
+- name: Install Logstash (Ubuntu)
+  apt:
+    name: logstash
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Logstash (Rocky Linux)
+  dnf:
+    name: logstash
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Configure Logstash Pipeline
+  template:
+    src: logstash.conf.j2
+    dest: /etc/logstash/conf.d/apache2-logstash.conf
+  notify: Restart Logstash
+
+- name: Enable and start Logstash
+  systemd:
+    name: logstash
+    enabled: true
+    state: started

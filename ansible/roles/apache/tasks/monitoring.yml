@@ -1,0 +1,25 @@
+---
+# Example of monitoring tasks (e.g., installing Nagios plugins or other monitoring tools)
+
+- name: Install basic monitoring tools (Ubuntu)
+  apt:
+    name:
+      - nagios-plugins-basic
+      - nagios-plugins-common
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install basic monitoring tools (Rocky)
+  dnf:
+    name:
+      - nagios-plugins-all
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure monitoring directory exists
+  file:
+    path: /opt/monitoring
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'

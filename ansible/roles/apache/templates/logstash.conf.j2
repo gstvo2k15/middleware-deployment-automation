@@ -1,0 +1,22 @@
+input {
+  beats {
+    port => {{ logstash_port }}
+  }
+}
+
+filter {
+  json {
+    source => "message"
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["{{ elk_server }}"]
+    user => "{{ elk_username }}"
+    password => "{{ elk_password }}"
+    ssl => true
+    index => "apache-logs-%{+YYYY.MM.dd}"
+  }
+  stdout { codec => rubydebug }
+}

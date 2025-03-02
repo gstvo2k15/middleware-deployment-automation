@@ -1,0 +1,18 @@
+---
+- name: Install Fail2Ban (Ubuntu)
+  apt:
+    name: fail2ban
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Fail2Ban (Rocky Linux)
+  dnf:
+    name: fail2ban
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Copy Fail2Ban config
+  copy:
+    src: jail.local
+    dest: /etc/fail2ban/jail.local
+  notify: Restart Fail2Ban

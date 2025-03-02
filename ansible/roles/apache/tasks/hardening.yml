@@ -1,0 +1,20 @@
+---
+- name: Copy security.conf template
+  template:
+    src: security.conf.j2
+    dest: "/etc/{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}/conf-available/security.conf"
+  notify: Restart Apache
+
+- name: Enable security configuration on Ubuntu
+  command: a2enconf security
+  notify: Restart Apache
+  when: ansible_os_family == "Debian"
+
+# On Rocky, we might need to include the file manually in httpd.conf or a conf.d directory
+- name: Link or include security.conf on Rocky
+  file:
+    src: "/etc/httpd/conf-available/security.conf"
+    dest: "/etc/httpd/conf.d/security.conf"
+    state: link
+  notify: Restart Apache
+  when: ansible_os_family == "RedHat"

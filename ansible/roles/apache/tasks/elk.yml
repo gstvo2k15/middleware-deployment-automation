@@ -1,0 +1,24 @@
+---
+- name: Install Filebeat (Ubuntu)
+  apt:
+    name: filebeat
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Filebeat (Rocky Linux)
+  dnf:
+    name: filebeat
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Configure Filebeat
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+  notify: Restart Filebeat
+
+- name: Enable and start Filebeat
+  systemd:
+    name: filebeat
+    enabled: true
+    state: started

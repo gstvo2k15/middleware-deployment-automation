@@ -1,1 +1,7 @@
-# Ansible Playbook
+---
+- name: Apache2 Hardening with ELK & Logstash
+  hosts: apache_servers
+  become: true
+  roles:
+    - role: apache
+      tags: apache
