@@ -3,14 +3,3 @@ apache_ssl_enabled: true
 apache_hardening_enabled: true
 apache_firewall_enabled: true
 apache_fail2ban_enabled: true
-apache_logging_enabled: true
-
-# ELK & Logstash Configuration
-apache_elk_enabled: true
-apache_elk_server: "https://elk-server:9200"
-apache_elk_username: "elastic"
-apache_elk_password: "password123"
-apache_filebeat_enabled: true
-apache_logstash_enabled: true
-apache_logstash_host: "logstash-server"
-apache_logstash_port: 5044

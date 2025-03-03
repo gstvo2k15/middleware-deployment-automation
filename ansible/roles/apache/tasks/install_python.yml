@@ -1,21 +1,15 @@
 ---
-- name: Install Python 3.9 on Rocky Linux 8
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version is version("8", "==")
+- name: Install Python Dependencies
   block:
-    - name: Install Python 3.9
-      ansible.builtin.dnf:
-        name: python39
+    - name: Install Python3 (Ubuntu)
+      ansible.builtin.apt:
+        name: python3
         state: present
+        update_cache: true
+      when: ansible_os_family == "Debian"
 
-    - name: Set Python 3.9 as default
-      ansible.builtin.command: alternatives --set python /usr/bin/python3.9
-      changed_when: false
-
-    - name: Verify Python version
-      ansible.builtin.command: python --version
-      register: python_version_output
-      changed_when: false
-
-    - name: Show Python version
-      ansible.builtin.debug:
-        msg: "Python version set to {{ python_version_output.stdout }}"
+    - name: Install Python3 (Rocky)
+      ansible.builtin.dnf:
+        name: python3
+        state: present
+      when: ansible_os_family == "RedHat"

@@ -1,7 +1,9 @@
 ---
-- name: Apache2 Hardening with ELK & Logstash
-  hosts: latest_release
+- name: Apply Security Hardening and SSL
+  hosts: apache_servers
   become: true
-  roles:
-    - role: apache
-      tags: apache
+
+  tasks:
+    - name: Include Apache hardening role
+      ansible.builtin.include_role:
+        name: apache

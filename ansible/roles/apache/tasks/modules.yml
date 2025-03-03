@@ -1,0 +1,30 @@
+---
+- name: Configure Apache Monitoring Modules
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Enable mod_status and mod_info (Ubuntu)
+      ansible.builtin.command: a2enmod status info
+      notify: Restart Apache
+      changed_when: false
+      when: ansible_os_family == "Debian"
+
+- name: Ensure Monitoring Modules are enabled (Rocky)
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Install required modules for Rocky
+      ansible.builtin.lineinfile:
+        path: /etc/httpd/conf.modules.d/00-base.conf
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      loop:
+        - { regexp: "^#?LoadModule status_module", line: "LoadModule status_module modules/mod_status.so" }
+        - { regexp: "^#?LoadModule info_module", line: "LoadModule info_module modules/mod_info.so" }
+        - { regexp: "^#?LoadModule watchdog_module", line: "LoadModule watchdog_module modules/mod_watchdog.so" }
+      notify: Restart Apache
+
+    - name: Deploy mod_status and mod_info Configuration
+      ansible.builtin.template:
+        src: monitoring.conf.j2
+        dest: "/etc/httpd/conf.d/monitoring.conf"
+        mode: "0o644"
+      notify: Restart Apache

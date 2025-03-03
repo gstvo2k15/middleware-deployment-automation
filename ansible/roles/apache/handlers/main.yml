@@ -1,15 +1,5 @@
 ---
 - name: Restart Apache
-  ansible.builtin.systemd:
+  ansible.builtin.service:
     name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
-    state: restarted
-
-- name: Restart Logstash
-  ansible.builtin.systemd:
-    name: logstash
-    state: restarted
-
-- name: Restart Filebeat
-  ansible.builtin.systemd:
-    name: filebeat
     state: restarted

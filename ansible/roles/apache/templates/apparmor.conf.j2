@@ -1,0 +1,41 @@
+# AppArmor profile for Apache2
+#include <tunables/global>
+
+/usr/sbin/apache2 {
+    # Permitir ejecución del binario principal
+    # y acceso a sus dependencias necesarias
+    include <abstractions/base>
+    include <abstractions/apache2-common>
+
+    # Permitir acceso a los directorios principales de Apache
+    /etc/apache2/** r,
+    /usr/lib/apache2/** rm,
+    /usr/share/apache2/** r,
+    /var/log/apache2/** rw,
+    /var/run/apache2/** rw,
+    /var/www/** rwm,
+    
+    # Permitir uso de módulos y configuración
+    /etc/apache2/mods-enabled/** r,
+    /etc/apache2/sites-enabled/** r,
+
+    # Acceso a archivos de certificados SSL
+    /etc/ssl/certs/** r,
+    /etc/ssl/private/** r,
+
+    # Logs y PID
+    /var/log/apache2/* rw,
+    /var/run/apache2.pid w,
+
+    # Habilitar conexiones de red
+    network inet stream,
+    network inet6 stream,
+
+    # Permitir ejecución de scripts CGI si es necesario
+    /usr/lib/cgi-bin/** rmix,
+
+    # Denegar accesos inseguros o innecesarios
+    deny /home/** w,
+    deny /root/** rw,
+    deny /tmp/** rwk,
+}

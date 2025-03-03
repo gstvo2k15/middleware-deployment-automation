@@ -1,22 +1,25 @@
 ---
-- name: Copy security.conf template
-  ansible.builtin.template:
-    src: security.conf.j2
-    dest: "/etc/{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}/conf-available/security.conf"
-    mode: "0o644"
-  notify: Restart Apache
-
-- name: Enable security configuration on Ubuntu
-  ansible.builtin.command: a2enconf security
-  notify: Restart Apache
+- name: Apply Security Hardening (Ubuntu)
   when: ansible_os_family == "Debian"
-  changed_when: false
+  block:
+    - name: Copy security.conf
+      ansible.builtin.template:
+        src: security.conf.j2
+        dest: "/etc/apache2/conf-available/security.conf"
+        mode: "0o644"
+      notify: Restart Apache
 
-# On Rocky, we might need to include the file manually in httpd.conf or a conf.d directory
-- name: Link or include security.conf on Rocky
-  ansible.builtin.file:
-    src: "/etc/httpd/conf-available/security.conf"
-    dest: "/etc/httpd/conf.d/security.conf"
-    state: link
-  notify: Restart Apache
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
+    - name: Enable security module
+      ansible.builtin.command: a2enconf security
+      changed_when: false
+      notify: Restart Apache
+
+- name: Apply Security Hardening (Rocky)
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Copy security.conf
+      ansible.builtin.template:
+        src: security.conf.j2
+        dest: "/etc/httpd/conf.d/security.conf"
+        mode: "0o644"
+      notify: Restart Apache

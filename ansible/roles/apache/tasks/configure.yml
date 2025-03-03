@@ -1,0 +1,53 @@
+---
+- name: Configure Apache on Rocky & Ubuntu
+  when: ansible_os_family in ["RedHat", "Debian"]
+  block:
+    - name: Ensure Apache is installed
+      ansible.builtin.package:
+        name: "{{ 'httpd' if ansible_os_family == 'RedHat' else 'apache2' }}"
+        state: present
+
+    - name: Set ServerName globally
+      ansible.builtin.lineinfile:
+        path: "{{ '/etc/httpd/conf/httpd.conf' if ansible_os_family == 'RedHat' else '/etc/apache2/apache2.conf' }}"
+        line: "ServerName {{ ansible_fqdn | default(ansible_host) }}"
+        create: true
+        mode: "0o644"
+      notify: Restart Apache
+
+    - name: Ensure index.html exists to avoid 403 Forbidden
+      ansible.builtin.copy:
+        dest: "/var/www/html/index.html"
+        content: "Apache is working on {{ ansible_distribution }} {{ ansible_distribution_version }}"
+        mode: "0o644"
+
+    - name: Ensure required Apache modules are installed
+      ansible.builtin.package:
+        name:
+          - "{{ 'mod_ssl' if ansible_os_family == 'RedHat' else 'libapache2-mod-ssl' }}"
+          - "{{ 'mod_rewrite' if ansible_os_family == 'RedHat' else 'libapache2-mod-rewrite' }}"
+          - "{{ 'mod_headers' if ansible_os_family == 'RedHat' else 'libapache2-mod-headers' }}"
+        state: present
+      notify: Restart Apache
+
+    - name: Enable Apache modules (Ubuntu only)
+      ansible.builtin.command: a2enmod ssl rewrite headers
+      when: ansible_os_family == "Debian"
+      changed_when: false
+      notify: Restart Apache
+
+    - name: Ensure Apache listens on ports 80 and 443
+      ansible.builtin.lineinfile:
+        path: "{{ 'etc/httpd/conf/httpd.conf' if ansible_os_family == 'RedHat' else '/etc/apache2/ports.conf' }}"
+        line: "Listen 80\nListen 443"
+      notify: Restart Apache
+
+    - name: Open firewall for HTTP & HTTPS
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      with_items:
+        - http
+        - https
+      notify: Reload Firewalld

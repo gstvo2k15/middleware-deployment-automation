@@ -1,49 +1,65 @@
 ---
-- name: Enable SSL module (Ubuntu)
-  ansible.builtin.command: a2enmod ssl
-  notify: Restart Apache
+- name: Configure SSL on Ubuntu
   when: ansible_os_family == "Debian"
-  changed_when: false
+  block:
+    - name: Enable SSL module (Ubuntu)
+      ansible.builtin.command: a2enmod ssl
+      notify: Restart Apache
+      changed_when: false
 
-- name: Install Certbot (Ubuntu)
-  ansible.builtin.apt:
-    name: python3-certbot-apache
-    state: present
-    update_cache: true
-  when: ansible_os_family == "Debian"
+    - name: Install required packages for SSL
+      ansible.builtin.apt:
+        name:
+          - python3-certbot-apache
+          - openssl
+        state: present
+        update_cache: true
 
-- name: Install mod_ssl and Certbot (Rocky)
-  ansible.builtin.dnf:
-    name:
-      - mod_ssl
-      - certbot
-    state: present
+    - name: Generate self-signed SSL certificate (Ubuntu)
+      ansible.builtin.command: >
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048
+        -keyout /etc/ssl/private/apache-selfsigned.key
+        -out /etc/ssl/certs/apache-selfsigned.crt
+        -subj "/CN={{ ansible_fqdn }}"
+      args:
+        creates: /etc/ssl/certs/apache-selfsigned.crt
+      changed_when: false
+
+    - name: Copy SSL configuration for Apache (Ubuntu)
+      ansible.builtin.template:
+        src: default-ssl.conf.j2
+        dest: "/etc/apache2/sites-available/default-ssl.conf"
+        mode: "0644"
+      notify: Restart Apache
+
+    - name: Enable SSL site
+      ansible.builtin.command: a2ensite default-ssl
+      notify: Restart Apache
+      changed_when: false
+
+- name: Configure SSL on Rocky Linux
   when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
+  block:
+    - name: Install required packages for SSL
+      ansible.builtin.dnf:
+        name:
+          - mod_ssl
+          - openssl
+        state: present
 
-- name: Copy default-ssl.conf
-  ansible.builtin.template:
-    src: default-ssl.conf.j2
-    dest: "/etc/{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}/sites-available/default-ssl.conf"
-    mode: "0o644"
-  notify: Restart Apache
-  when: ansible_os_family == "Debian"
+    - name: Generate self-signed SSL certificate (Rocky)
+      ansible.builtin.command: >
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048
+        -keyout /etc/pki/tls/private/apache-selfsigned.key
+        -out /etc/pki/tls/certs/apache-selfsigned.crt
+        -subj "/CN={{ ansible_fqdn }}"
+      args:
+        creates: /etc/pki/tls/certs/apache-selfsigned.crt
+      changed_when: false
 
-# On Rocky, paths might differ (e.g., /etc/httpd/conf.d/ssl.conf)
-- name: Copy SSL conf for Rocky
-  ansible.builtin.template:
-    src: default-ssl.conf.j2
-    dest: /etc/httpd/conf.d/ssl.conf
-    mode: "0o644"
-  notify: Restart Apache
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
-
-- name: Obtain Let's Encrypt certificate (Ubuntu)
-  ansible.builtin.command: certbot --apache --non-interactive --agree-tos -m admin@example.com -d example.com
-  when: ansible_os_family == "Debian"
-  changed_when: false
-
-# For Rocky, use certbot with the httpd plugin or manual config
-- name: Obtain Let's Encrypt certificate (Rocky)
-  ansible.builtin.command: certbot --apache --non-interactive --agree-tos -m admin@example.com -d example.com
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
-  changed_when: false
+    - name: Copy SSL configuration for Apache (Rocky)
+      ansible.builtin.template:
+        src: default-ssl.conf.j2
+        dest: /etc/httpd/conf.d/ssl.conf
+        mode: "0644"
+      notify: Restart Apache

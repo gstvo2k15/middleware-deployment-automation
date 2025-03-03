@@ -1,19 +1,53 @@
 ---
-- name: Install Fail2Ban (Ubuntu)
-  ansible.builtin.apt:
-    name: fail2ban
-    state: present
-  when: ansible_os_family == "Debian"
+- name: Configure DuckDNS SSL
+  block:
+    - name: Set DuckDNS token and domain
+      ansible.builtin.set_fact:
+        duckdns_token: "{{ lookup('env', 'DUCKDNS_TOKEN') }}"
+        duckdns_domain: "{{ lookup('env', 'DUCKDNS_DOMAIN') }}"
+        certbot_email: "{{ lookup('env', 'CERTBOT_EMAIL') }}"
 
-- name: Install Fail2Ban (Rocky Linux)
-  ansible.builtin.dnf:
-    name: fail2ban
-    state: present
-  when: ansible_distribution == "Rocky" and ansible_distribution_major_version in ["8", "9"]
+    - name: Validate required variables
+      ansible.builtin.fail:
+        msg: "Missing required variables DUCKDNS_TOKEN, DUCKDNS_DOMAIN, or CERTBOT_EMAIL!"
+      when: not duckdns_token or not duckdns_domain or not certbot_email
 
-- name: Copy Fail2Ban config
-  ansible.builtin.copy:
-    src: jail.local
-    dest: /etc/fail2ban/jail.local
-    mode: "0644"
-  notify: Restart Fail2Ban
+    - name: Update DuckDNS IP
+      ansible.builtin.uri:
+        url: "https://www.duckdns.org/update?domains={{ duckdns_domain }}&token={{ duckdns_token }}&ip="
+        method: GET
+        return_content: true
+      changed_when: false
+
+    - name: Install Certbot for Nginx
+      ansible.builtin.package:
+        name: python3-certbot-nginx
+        state: present
+
+    - name: Ensure Let's Encrypt directory exists
+      ansible.builtin.file:
+        path: "/etc/letsencrypt/accounts/acme-v02.api.letsencrypt.org/directory"
+        state: directory
+        mode: "0700"
+
+    - name: Generate ACME account key if missing
+      ansible.builtin.command: openssl genrsa 4096
+      args:
+        creates: "/etc/letsencrypt/accounts/acme-v02.api.letsencrypt.org/directory/account.pem"
+      register: acme_key_result
+      changed_when: acme_key_result.rc == 0
+
+    - name: Obtain SSL certificate with DuckDNS
+      community.crypto.acme_certificate:
+        acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+        account_email: "{{ certbot_email }}"
+        acme_version: 2
+        account_key_src: "/etc/letsencrypt/accounts/acme-v02.api.letsencrypt.org/directory/account.pem"
+        terms_agreed: true
+        csr_content: |
+          -----BEGIN CERTIFICATE REQUEST-----
+          {{ lookup('file', '/etc/letsencrypt/live/{{ duckdns_domain }}/csr.pem') }}
+          -----END CERTIFICATE REQUEST-----
+        fullchain_dest: "/etc/letsencrypt/live/{{ duckdns_domain }}/fullchain.pem"
+      register: certbot_result
+      notify: Reload Nginx
