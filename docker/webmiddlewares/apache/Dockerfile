@@ -1,5 +1,4 @@
-ARG APACHE_VERSION=2.4.63
-FROM httpd:${APACHE_VERSION}-alpine3.21
+FROM httpd:2.4.63-alpine3.21
 
 # Install required dependencies
 RUN apk add --no-cache \
