@@ -18,6 +18,7 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - ENABLE_SSL=${ENABLE_SSL}
+      - SERVER_NAME=apache.local
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 30s
