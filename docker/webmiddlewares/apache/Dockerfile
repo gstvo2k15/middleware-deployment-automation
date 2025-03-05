@@ -16,11 +16,11 @@ RUN mkdir -p /var/log/apache2 && \
 
 RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf
 
-# Copy configuration files but keep a template for envsubst
+# Copy template instead of actual httpd.conf
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf.template
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
 EXPOSE 80 443
 
-# Replace SERVER_NAME in httpd.conf at runtime
-ENTRYPOINT ["/bin/sh", "-c", "envsubst '$$SERVER_NAME' < /usr/local/apache2/conf/httpd.conf.template > /usr/local/apache2/conf/httpd.conf && exec httpd-foreground"]
+# Copy the template to a writable location before starting Apache
+ENTRYPOINT ["/bin/sh", "-c", "cp /usr/local/apache2/conf/httpd.conf.template /tmp/httpd.conf && envsubst '$$SERVER_NAME' < /tmp/httpd.conf > /usr/local/apache2/conf/httpd.conf && exec httpd-foreground"]

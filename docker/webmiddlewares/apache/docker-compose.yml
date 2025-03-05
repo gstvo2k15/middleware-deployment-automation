@@ -8,7 +8,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./config/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./config/httpd.conf:/usr/local/apache2/conf/httpd.conf:rw
       - ./config/extra/:/usr/local/apache2/conf/extra/:ro
       - ./www:/usr/local/apache2/htdocs
       - ./logs:/usr/local/apache2/logs
