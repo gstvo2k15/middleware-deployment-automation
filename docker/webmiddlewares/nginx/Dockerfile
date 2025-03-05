@@ -1,10 +1,6 @@
 FROM nginx:stable-alpine3.20-perl
 
-# Ensure the nginx user/group exists only if not already present
-RUN getent group nginx || addgroup -g 1000 nginx && \
-    getent passwd nginx || adduser -D -G nginx -u 1000 nginx
-
-# Install required dependencies
+# Install dependencies required for ModSecurity
 RUN apk add --no-cache \
     autoconf \
     automake \
@@ -29,19 +25,28 @@ RUN apk add --no-cache \
     linux-headers \
     flex \
     bison \
-    jansson-dev
+    jansson-dev \
+    file \
+    openssl-dev \
+    gdb \
+    libstdc++ \
+    libffi-dev
 
-# Clone and build ModSecurity
+# Clone and compile ModSecurity
 RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity \
     && cd /usr/local/src/ModSecurity \
     && git submodule update --init --recursive \
     && ./build.sh \
-    && ./configure \
-    && make -j$(nproc) \
+    && CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0" ./configure --disable-doxygen-doc \
+    && make -j$(nproc) || make -j1 V=1 \
     && make install
 
-# Clone and build modsecurity-nginx
+# Clone and compile ModSecurity-Nginx connector
 RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx
+
+# Ensure necessary directories exist before setting permissions
+RUN mkdir -p /var/www /var/log/nginx /etc/nginx \
+    && chown -R nginx:nginx /var/log/nginx /var/www /etc/nginx
 
 # Copy hardened configurations
 COPY conf/nginx.conf /etc/nginx/nginx.conf
@@ -58,13 +63,8 @@ RUN if [ "$ENABLE_SSL" = "true" ]; then \
         touch /etc/ssl/private/nginx-selfsigned.key; \
     fi
 
-# Ensure necessary directories exist before setting permissions
-RUN mkdir -p /var/www /var/log/nginx /etc/nginx \
-    && chown -R nginx:nginx /var/log/nginx /var/www /etc/nginx
-
 # Expose ports based on SSL configuration
 EXPOSE 80
-ARG ENABLE_SSL=false
 RUN if [ "$ENABLE_SSL" = "true" ]; then EXPOSE 443; fi
 
 # Run Nginx as non-root

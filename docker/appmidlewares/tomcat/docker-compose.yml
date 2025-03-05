@@ -12,7 +12,6 @@ services:
       - ./config/server.xml:/usr/local/tomcat/conf/server.xml:ro
       - ./config/web.xml:/usr/local/tomcat/conf/web.xml:ro
       - ./config/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml:ro
-      - ./config/keystore.jks:/usr/local/tomcat/conf/keystore.jks:ro
       - ./logs:/usr/local/tomcat/logs
       - ./data/webapps:/usr/local/tomcat/webapps
     environment:
