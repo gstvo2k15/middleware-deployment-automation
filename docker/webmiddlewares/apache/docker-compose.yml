@@ -13,14 +13,13 @@ services:
       - ./config/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./config/extra/:/usr/local/apache2/conf/extra/:ro
       - ./www:/usr/local/apache2/htdocs
-      - ./logs:/usr/local/apache2/logs
       - ./certs:/etc/apache2/ssl
     environment:
       - TZ=${TIMEZONE}
       - ENABLE_SSL=${ENABLE_SSL}
       - SERVER_NAME=apache.local
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
       interval: 30s
       timeout: 10s
       retries: 5
