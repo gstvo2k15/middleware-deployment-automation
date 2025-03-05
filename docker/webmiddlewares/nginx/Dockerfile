@@ -55,12 +55,16 @@ COPY conf/hardening.conf /etc/nginx/conf.d/hardening.conf
 COPY conf/logging.conf /etc/nginx/conf.d/logging.conf
 COPY conf/firewall.conf /etc/nginx/conf.d/firewall.conf
 
-# Copy SSL certificates only if ENABLE_SSL is set to true
+# Ensure SSL directories exist
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private
+
+# Generate self-signed certificate if ENABLE_SSL=true
 ARG ENABLE_SSL=false
 RUN if [ "$ENABLE_SSL" = "true" ]; then \
-        mkdir -p /etc/ssl/certs /etc/ssl/private && \
-        touch /etc/ssl/certs/nginx-selfsigned.crt && \
-        touch /etc/ssl/private/nginx-selfsigned.key; \
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout /etc/ssl/private/nginx-selfsigned.key \
+        -out /etc/ssl/certs/nginx-selfsigned.crt \
+        -subj "/CN=localhost"; \
     fi
 
 # Expose ports based on SSL configuration
