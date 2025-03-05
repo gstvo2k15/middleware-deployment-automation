@@ -6,7 +6,8 @@ RUN apt-get update -yqq && apt-get install -yqq \
     modsecurity-crs \
     && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod headers security2
+RUN echo "LoadModule headers_module modules/mod_headers.so" >> /usr/local/apache2/conf/httpd.conf \
+    && echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf
 
 RUN mkdir -p /usr/local/apache2/logs/ \
     && touch /usr/local/apache2/logs/modsec_audit.log \

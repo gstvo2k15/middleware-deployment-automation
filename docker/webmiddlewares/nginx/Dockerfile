@@ -9,8 +9,6 @@ RUN addgroup -g 1000 nginx && adduser -D -G nginx -u 1000 nginx
 RUN apk add --no-cache \
     modsecurity \
     libmodsecurity \
-    certbot \
-    openssl \
     bash \
     curl
 
@@ -21,15 +19,21 @@ COPY nginx/conf/hardening.conf /etc/nginx/conf.d/hardening.conf
 COPY nginx/conf/logging.conf /etc/nginx/conf.d/logging.conf
 COPY nginx/conf/firewall.conf /etc/nginx/conf.d/firewall.conf
 
-# Copy SSL certificates (Replace with your certs or Let's Encrypt setup)
-COPY nginx/certs/nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
-COPY nginx/certs/nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
+# Copy SSL certificates only if ENABLE_SSL is set to true
+ARG ENABLE_SSL=false
+RUN if [ "$ENABLE_SSL" = "true" ]; then \
+        mkdir -p /etc/ssl/certs /etc/ssl/private && \
+        touch /etc/ssl/certs/nginx-selfsigned.crt && \
+        touch /etc/ssl/private/nginx-selfsigned.key; \
+    fi
 
 # Set proper permissions
 RUN chown -R nginx:nginx /var/log/nginx /var/www /etc/nginx
 
-# Expose ports for HTTP and HTTPS
-EXPOSE 80 443
+# Expose ports based on SSL configuration
+EXPOSE 80
+ARG ENABLE_SSL=false
+RUN if [ "$ENABLE_SSL" = "true" ]; then EXPOSE 443; fi
 
 # Run Nginx as non-root
 USER nginx
