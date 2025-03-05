@@ -1,10 +1,12 @@
 ARG APACHE_VERSION=2.4.57
 FROM httpd:${APACHE_VERSION}
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -yqq && apt-get install -yqq \
     libapache2-mod-security2 \
     modsecurity-crs \
     && rm -rf /var/lib/apt/lists/*
+
+RUN a2enmod headers
 
 # Enable ModSecurity
 RUN a2enmod security2 \
