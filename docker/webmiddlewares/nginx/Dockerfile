@@ -1,7 +1,4 @@
-# Use the specified Nginx version from .env
-ARG NGINX_VERSION=stable-alpine3.20-perl
-
-FROM nginx:${NGINX_VERSION}-alpine
+FROM nginx:stable-alpine3.20-perl
 
 # Set a non-root user for better security
 RUN addgroup -g 1000 nginx && adduser -D -G nginx -u 1000 nginx
