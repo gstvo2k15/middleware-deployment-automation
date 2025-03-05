@@ -17,7 +17,7 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - ENABLE_SSL=${ENABLE_SSL}
-      - SERVER_NAME=apache.local
+      - SERVER_NAME=${ENABLE_SSL}
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
       interval: 30s

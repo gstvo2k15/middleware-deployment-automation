@@ -1,5 +1,6 @@
 # Use the specified Nginx version from .env
-ARG NGINX_VERSION=stable
+ARG NGINX_VERSION=stable-alpine3.20-perl
+
 FROM nginx:${NGINX_VERSION}-alpine
 
 # Set a non-root user for better security
@@ -11,6 +12,28 @@ RUN apk add --no-cache \
     libmodsecurity \
     bash \
     curl
+
+# Install dependencies
+RUN apk add --no-cache \
+autoconf \
+automake \
+g++ \
+gcc \
+git \
+libtool \
+make \
+cmake \
+musl-dev \
+pcre-dev \
+zlib-dev \
+libxml2-dev \
+yajl-dev \
+lmdb-dev \
+geoip-dev \
+doxygen \
+curl-dev \
+lua-dev \
+linux-headers
 
 # Copy hardened configurations
 COPY conf/nginx.conf /etc/nginx/nginx.conf
