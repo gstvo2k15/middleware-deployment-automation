@@ -1,7 +1,8 @@
 FROM nginx:stable-alpine3.20-perl
 
-# Set a non-root user for better security
-RUN addgroup -g 1000 nginx && adduser -D -G nginx -u 1000 nginx
+# Ensure the nginx user/group exists only if not already present
+RUN getent group nginx || addgroup -g 1000 nginx && \
+    getent passwd nginx || adduser -D -G nginx -u 1000 nginx
 
 # Install security tools
 RUN apk add --no-cache \

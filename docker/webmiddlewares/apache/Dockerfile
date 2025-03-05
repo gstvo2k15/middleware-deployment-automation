@@ -1,9 +1,5 @@
 FROM httpd:2.4.63-alpine3.21
 
-# Ensure the nginx user/group exists only if not already present
-RUN getent group nginx || addgroup -g 1000 nginx && \
-    getent passwd nginx || adduser -D -G nginx -u 1000 nginx
-
 # Install required dependencies
 RUN apk add --no-cache \
     apache2-utils \
@@ -70,6 +66,7 @@ RUN mkdir -p /var/log/apache2 \
     && touch /var/log/apache2/modsec_audit.log /var/log/apache2/modsec_debug.log \
     && chmod -R 755 /var/log/apache2
 
+# Copy required conf
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
