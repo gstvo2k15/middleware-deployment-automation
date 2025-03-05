@@ -1,27 +1,43 @@
 ARG APACHE_VERSION
-
 FROM httpd:${APACHE_VERSION}-alpine3.21
 
-# Installs ModSecurity and required utilities
 RUN apk add --no-cache \
     apache2-utils \
-    modsecurity-apache \
-    modsecurity-crs
+    curl \
+    git \
+    libxml2-dev \
+    pcre-dev \
+    libtool \
+    automake \
+    autoconf \
+    gcc \
+    g++ \
+    make
 
-# ModSecurity Config
-RUN cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf \
-    && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/modsecurity/modsecurity.conf
+RUN git clone --depth=1 https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity \
+    && cd /usr/local/src/ModSecurity \
+    && ./build.sh \
+    && ./configure \
+    && make -j$(nproc) \
+    && make install
 
-RUN echo "LoadModule headers_module modules/mod_headers.so" >> /usr/local/apache2/conf/httpd.conf \
-    && echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf
+RUN git clone --depth=1 https://github.com/SpiderLabs/ModSecurity-apache /usr/local/src/ModSecurity-apache \
+    && cd /usr/local/src/ModSecurity-apache \
+    && ./autogen.sh \
+    && ./configure --with-apxs=/usr/local/apache2/bin/apxs \
+    && make -j$(nproc) \
+    && make install
 
-# Logs Config
-RUN mkdir -p /usr/local/apache2/logs \
-    && touch /usr/local/apache2/logs/access.log \
-    && touch /usr/local/apache2/logs/error.log \
-    && touch /usr/local/apache2/logs/modsec_audit.log \
-    && touch /usr/local/apache2/logs/modsec_debug.log \
-    && chmod -R 755 /usr/local/apache2/logs
+RUN git clone --depth=1 https://github.com/coreruleset/coreruleset /usr/local/apache2/conf/crs \
+    && cp /usr/local/apache2/conf/crs/crs-setup.conf.example /usr/local/apache2/conf/crs/crs-setup.conf
+
+RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf \
+    && echo "Include conf/crs/crs-setup.conf" >> /usr/local/apache2/conf/httpd.conf \
+    && echo "Include conf/crs/rules/*.conf" >> /usr/local/apache2/conf/httpd.conf
+
+RUN mkdir -p /var/log/apache2 \
+    && touch /var/log/apache2/modsec_audit.log /var/log/apache2/modsec_debug.log \
+    && chmod -R 755 /var/log/apache2
 
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
