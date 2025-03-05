@@ -2,8 +2,7 @@ services:
   nginx:
     build:
       context: .
-      args:
-        - NGINX_VERSION=${NGINX_VERSION}
+      dockerfile: Dockerfile
     container_name: nginx_hardened
     restart: unless-stopped
     ports:
@@ -12,11 +11,7 @@ services:
     networks:
       - nginx_network
     volumes:
-      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf/security.conf:/etc/nginx/conf.d/security.conf:ro
-      - ./nginx/conf/hardening.conf:/etc/nginx/conf.d/hardening.conf:ro
-      - ./nginx/conf/logging.conf:/etc/nginx/conf.d/logging.conf:ro
-      - ./nginx/conf/firewall.conf:/etc/nginx/conf.d/firewall.conf:ro
+      - ./nginx/conf:/etc/nginx/conf.d:ro
 
 networks:
   nginx_network:
