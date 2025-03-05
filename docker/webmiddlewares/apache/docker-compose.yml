@@ -3,8 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        APACHE_VERSION: ${APACHE_VERSION}
     container_name: apache2_server
     ports:
       - "80:80"
@@ -13,13 +11,14 @@ services:
       - ./config/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./config/extra/:/usr/local/apache2/conf/extra/:ro
       - ./www:/usr/local/apache2/htdocs
+      - ./logs:/usr/local/apache2/logs
       - ./certs:/etc/apache2/ssl
     environment:
-      - TZ=${TIMEZONE}
-      - ENABLE_SSL=${ENABLE_SSL}
-      - SERVER_NAME=${ENABLE_SSL}
+      - TZ=Europe/Madrid
+      - ENABLE_SSL=false
+      - SERVER_NAME=apache.local
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost"]
+      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5

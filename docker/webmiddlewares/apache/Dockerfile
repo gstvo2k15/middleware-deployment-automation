@@ -1,74 +1,25 @@
 FROM httpd:2.4.63-alpine3.21
 
-# Install dependencies
+# Install required packages, including ModSecurity
 RUN apk add --no-cache \
     apache2-utils \
     curl \
-    git \
     libxml2-dev \
     pcre-dev \
-    libtool \
-    automake \
-    autoconf \
-    gcc \
-    g++ \
-    make \
-    linux-headers \
-    flex \
-    bison \
-    yajl \
-    yajl-dev \
-    geoip \
-    geoip-dev \
-    doxygen \
-    py3-docutils \
-    libstdc++ \
-    cmake \
-    musl-dev \
-    perl \
-    openssl-dev \
-    && rm -rf /var/cache/apk/*
+    modsecurity-apache \
+    modsecurity-crs
 
-# Clone and build ModSecurity
-RUN git clone --depth=1 --recurse-submodules https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity \
-    && cd /usr/local/src/ModSecurity \
-    && git submodule update --init --recursive \
-    && ./build.sh \
-    && ./configure --prefix=/usr/local --libdir=/usr/local/lib --includedir=/usr/local/include \
-    && make -j$(nproc) \
-    && make install
-
-# Manually move library if not installed in /usr/local/lib
-RUN mkdir -p /usr/local/lib/ \
-    && cp -v /usr/local/modsecurity/lib/* /usr/local/lib/ || true \
-    && ldconfig
-
-# Verify ModSecurity installation
-RUN ls -lah /usr/local/lib/ | grep libmodsecurity \
-    && ldconfig -p | grep modsecurity
-
-# Clone and build ModSecurity-Apache
-RUN git clone --depth=1 https://github.com/SpiderLabs/ModSecurity-apache /usr/local/src/ModSecurity-apache \
-    && cd /usr/local/src/ModSecurity-apache \
-    && ./autogen.sh \
-    && ./configure --with-apxs=/usr/local/apache2/bin/apxs --with-libmodsecurity=/usr/local/lib/ \
-    && make -j$(nproc) \
-    && make install
-
-# Clone and configure Core Rule Set (CRS)
-RUN git clone --depth=1 https://github.com/coreruleset/coreruleset /usr/local/apache2/conf/crs \
-    && cp /usr/local/apache2/conf/crs/crs-setup.conf.example /usr/local/apache2/conf/crs/crs-setup.conf
-
-# Configure ModSecurity in Apache
+# Enable ModSecurity modules in Apache
 RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf \
-    && echo "Include conf/crs/crs-setup.conf" >> /usr/local/apache2/conf/httpd.conf \
-    && echo "Include conf/crs/rules/*.conf" >> /usr/local/apache2/conf/httpd.conf
+    && echo "LoadModule unique_id_module modules/mod_unique_id.so" >> /usr/local/apache2/conf/httpd.conf
 
-# Create ModSecurity log files
-RUN mkdir -p /var/log/apache2 \
-    && touch /var/log/apache2/modsec_audit.log /var/log/apache2/modsec_debug.log \
-    && chmod -R 755 /var/log/apache2
+# Ensure correct permissions for logs and configs
+RUN mkdir -p /usr/local/apache2/logs \
+    && touch /usr/local/apache2/logs/modsec_audit.log \
+    && touch /usr/local/apache2/logs/modsec_debug.log \
+    && chmod -R 755 /usr/local/apache2/logs
 
+# Copy configuration files
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
