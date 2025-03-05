@@ -12,7 +12,7 @@ RUN test -f /usr/lib/apache2/modules/mod_security2.so && \
 # Create logs for ModSecurity
 RUN mkdir -p /var/log/apache2 && \
     touch /var/log/apache2/modsec_audit.log /var/log/apache2/modsec_debug.log && \
-    chmod -R 777 /var/log/apache2
+    chmod -R 775 /var/log/apache2
 
 RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf
 
