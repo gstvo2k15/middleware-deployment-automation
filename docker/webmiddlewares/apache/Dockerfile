@@ -25,6 +25,9 @@ RUN apk add --no-cache \
     py3-docutils \
     libstdc++ \
     cmake \
+    musl-dev \
+    perl \
+    openssl-dev \
     && rm -rf /var/cache/apk/*
 
 # Clone and build ModSecurity
@@ -34,9 +37,10 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/SpiderLabs/ModSe
     && ./build.sh \
     && ./configure \
     && make -j$(nproc) \
-    && make install
+    && make install \
+    && ldconfig
 
-# Verify that ModSecurity was installed
+# Verify ModSecurity installation
 RUN ls -lah /usr/local/lib/ \
     && ls -lah /usr/local/lib/libmodsecurity.* \
     && ldconfig

@@ -50,8 +50,9 @@ RUN if [ "$ENABLE_SSL" = "true" ]; then \
         touch /etc/ssl/private/nginx-selfsigned.key; \
     fi
 
-# Set proper permissions
-RUN chown -R nginx:nginx /var/log/nginx /var/www /etc/nginx
+# Ensure necessary directories exist before setting permissions
+RUN mkdir -p /var/www /var/log/nginx /etc/nginx \
+    && chown -R nginx:nginx /var/log/nginx /var/www /etc/nginx
 
 # Expose ports based on SSL configuration
 EXPOSE 80
