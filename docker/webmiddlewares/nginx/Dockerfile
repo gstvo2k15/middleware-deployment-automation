@@ -13,11 +13,11 @@ RUN apk add --no-cache \
     curl
 
 # Copy hardened configurations
-COPY nginx/conf/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/conf/security.conf /etc/nginx/conf.d/security.conf
-COPY nginx/conf/hardening.conf /etc/nginx/conf.d/hardening.conf
-COPY nginx/conf/logging.conf /etc/nginx/conf.d/logging.conf
-COPY nginx/conf/firewall.conf /etc/nginx/conf.d/firewall.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/security.conf /etc/nginx/conf.d/security.conf
+COPY conf/hardening.conf /etc/nginx/conf.d/hardening.conf
+COPY conf/logging.conf /etc/nginx/conf.d/logging.conf
+COPY conf/firewall.conf /etc/nginx/conf.d/firewall.conf
 
 # Copy SSL certificates only if ENABLE_SSL is set to true
 ARG ENABLE_SSL=false
