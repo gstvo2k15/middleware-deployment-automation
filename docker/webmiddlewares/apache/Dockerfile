@@ -1,4 +1,5 @@
-FROM httpd:2.4.63-alpine3.21
+ARG APACHE_VERSION=2.4.63
+FROM httpd:${APACHE_VERSION}-alpine3.21
 
 # Install required dependencies
 RUN apk add --no-cache \
@@ -34,7 +35,7 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/SpiderLabs/ModSe
     && cd /usr/local/src/ModSecurity \
     && git submodule update --init --recursive \
     && ./build.sh \
-    && ./configure \
+    && ./configure --prefix=/usr/local --libdir=/usr/local/lib --includedir=/usr/local/include \
     && make -j$(nproc) \
     && make install \
     && ldconfig
@@ -66,7 +67,6 @@ RUN mkdir -p /var/log/apache2 \
     && touch /var/log/apache2/modsec_audit.log /var/log/apache2/modsec_debug.log \
     && chmod -R 755 /var/log/apache2
 
-# Copy required conf
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
