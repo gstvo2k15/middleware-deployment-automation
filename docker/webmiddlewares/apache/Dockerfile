@@ -1,5 +1,9 @@
 FROM httpd:2.4.63-alpine3.21
 
+# Ensure the nginx user/group exists only if not already present
+RUN getent group nginx || addgroup -g 1000 nginx && \
+    getent passwd nginx || adduser -D -G nginx -u 1000 nginx
+
 # Install required dependencies
 RUN apk add --no-cache \
     apache2-utils \
