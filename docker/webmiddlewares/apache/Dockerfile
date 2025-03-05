@@ -1,6 +1,6 @@
 FROM httpd:2.4.63-alpine3.21
 
-# Install required dependencies
+# Install dependencies
 RUN apk add --no-cache \
     apache2-utils \
     curl \
@@ -36,13 +36,16 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/SpiderLabs/ModSe
     && ./build.sh \
     && ./configure --prefix=/usr/local --libdir=/usr/local/lib --includedir=/usr/local/include \
     && make -j$(nproc) \
-    && make install \
+    && make install
+
+# Manually move library if not installed in /usr/local/lib
+RUN mkdir -p /usr/local/lib/ \
+    && cp -v /usr/local/modsecurity/lib/* /usr/local/lib/ || true \
     && ldconfig
 
 # Verify ModSecurity installation
-RUN ls -lah /usr/local/lib/ \
-    && ls -lah /usr/local/lib/libmodsecurity.* \
-    && ldconfig
+RUN ls -lah /usr/local/lib/ | grep libmodsecurity \
+    && ldconfig -p | grep modsecurity
 
 # Clone and build ModSecurity-Apache
 RUN git clone --depth=1 https://github.com/SpiderLabs/ModSecurity-apache /usr/local/src/ModSecurity-apache \

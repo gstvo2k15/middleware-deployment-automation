@@ -1,4 +1,4 @@
-FROM jboss/wildfly:26.1.1.Final
+FROM quay.io/wildfly/wildfly:26.1.1.Final
 
 USER root
 
