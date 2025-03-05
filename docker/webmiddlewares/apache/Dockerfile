@@ -1,4 +1,4 @@
-FROM httpd:2.4.63-bullseye
+FROM httpd:2.4.57-bullseye
 
 # Install ModSecurity and dependencies
 RUN apt-get update && apt-get install -y \

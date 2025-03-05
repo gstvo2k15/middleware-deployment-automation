@@ -14,9 +14,9 @@ services:
       - ./logs:/usr/local/apache2/logs
       - ./certs:/etc/apache2/ssl
     environment:
-      TZ: "${TIMEZONE}"
-      ENABLE_SSL: "${ENABLE_SSL}"
-      SERVER_NAME: "${SERVER_NAME}"
+      TZ: "Europe/Madrid"
+      ENABLE_SSL: "false"
+      SERVER_NAME: "apache.local"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 30s
