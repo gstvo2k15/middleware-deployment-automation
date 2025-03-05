@@ -1,4 +1,4 @@
-ARG APACHE_VERSION
+ARG APACHE_VERSION=2.4.57
 FROM httpd:${APACHE_VERSION}
 
 LABEL maintainer="Gustavo Olmo <gustavo.olmo@es.abb.com>"
