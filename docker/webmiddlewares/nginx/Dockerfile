@@ -4,34 +4,44 @@ FROM nginx:stable-alpine3.20-perl
 RUN getent group nginx || addgroup -g 1000 nginx && \
     getent passwd nginx || adduser -D -G nginx -u 1000 nginx
 
-# Install security tools
+# Install required dependencies
 RUN apk add --no-cache \
-    modsecurity \
-    libmodsecurity \
+    autoconf \
+    automake \
     bash \
-    curl
+    curl \
+    g++ \
+    gcc \
+    git \
+    libtool \
+    make \
+    cmake \
+    musl-dev \
+    pcre-dev \
+    zlib-dev \
+    libxml2-dev \
+    yajl-dev \
+    lmdb-dev \
+    geoip-dev \
+    doxygen \
+    curl-dev \
+    lua-dev \
+    linux-headers \
+    flex \
+    bison \
+    jansson-dev
 
-# Install dependencies
-RUN apk add --no-cache \
-autoconf \
-automake \
-g++ \
-gcc \
-git \
-libtool \
-make \
-cmake \
-musl-dev \
-pcre-dev \
-zlib-dev \
-libxml2-dev \
-yajl-dev \
-lmdb-dev \
-geoip-dev \
-doxygen \
-curl-dev \
-lua-dev \
-linux-headers
+# Clone and build ModSecurity
+RUN git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity \
+    && cd /usr/local/src/ModSecurity \
+    && git submodule update --init --recursive \
+    && ./build.sh \
+    && ./configure \
+    && make -j$(nproc) \
+    && make install
+
+# Clone and build modsecurity-nginx
+RUN git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx
 
 # Copy hardened configurations
 COPY conf/nginx.conf /etc/nginx/nginx.conf
