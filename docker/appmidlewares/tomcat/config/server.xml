@@ -1,0 +1,29 @@
+<Server port="8005" shutdown="SHUTDOWN">
+    <Service name="Catalina">
+        <Connector port="8080" protocol="HTTP/1.1"
+                   connectionTimeout="20000"
+                   redirectPort="8443"
+                   maxThreads="200"
+                   maxHttpHeaderSize="8192"
+                   enableLookups="false"
+                   compression="on"
+                   compressionMinSize="2048"
+                   noCompressionUserAgents="gozilla, traviata"
+                   restrictedUserAgents="gozilla, traviata" />
+
+        <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+                   SSLEnabled="true">
+            <SSLHostConfig protocols="TLSv1.2,TLSv1.3">
+                <Certificate certificateFile="conf/tomcat-cert.pem"
+                             certificateKeyFile="conf/tomcat-key.pem"
+                             type="RSA" />
+            </SSLHostConfig>
+        </Connector>
+
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps"
+                  unpackWARs="true" autoDeploy="false">
+            </Host>
+        </Engine>
+    </Service>
+</Server>

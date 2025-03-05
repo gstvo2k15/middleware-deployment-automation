@@ -1,0 +1,33 @@
+services:
+  weblogic:
+    image: oracle/weblogic:14.1.1
+    container_name: weblogic-secure
+    hostname: weblogic
+    restart: always
+    networks:
+      - weblogic_net
+    ports:
+      - "7001:7001" # WebLogic Admin Server
+      - "7002:7002" # WebLogic SSL
+    environment:
+      ADMIN_USER: ${ADMIN_USER}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      DOMAIN_NAME: mydomain
+      DOMAIN_HOME: /u01/oracle/user_projects/domains/mydomain
+      CONFIG_DIR: /config
+    volumes:
+      - ./volumes/config:/config
+      - ./volumes/deployments:/u01/oracle/user_projects/domains/mydomain/autodeploy
+      - ./volumes/logs:/u01/oracle/user_projects/domains/mydomain/logs
+      - ./volumes/certs:/u01/oracle/certs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/console"]
+      interval: 30s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    command: ["/u01/oracle/container-scripts/startWebLogic.sh"]
+
+networks:
+  weblogic_net:
+    driver: bridge

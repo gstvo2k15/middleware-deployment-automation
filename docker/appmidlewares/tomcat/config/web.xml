@@ -1,0 +1,10 @@
+<web-app>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Restricted Methods</web-resource-name>
+            <url-pattern>/*</url-pattern>
+            <http-method-omission>TRACE</http-method-omission>
+            <http-method-omission>OPTIONS</http-method-omission>
+        </web-resource-collection>
+    </security-constraint>
+</web-app>

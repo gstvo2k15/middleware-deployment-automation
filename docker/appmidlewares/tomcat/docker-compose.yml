@@ -1,0 +1,23 @@
+services:
+  tomcat:
+    container_name: tomcat-secure
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    networks:
+      - tomcat_net
+    volumes:
+      - ./config/server.xml:/usr/local/tomcat/conf/server.xml:ro
+      - ./config/web.xml:/usr/local/tomcat/conf/web.xml:ro
+      - ./config/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml:ro
+      - ./config/keystore.jks:/usr/local/tomcat/conf/keystore.jks:ro
+      - ./logs:/usr/local/tomcat/logs
+      - ./data/webapps:/usr/local/tomcat/webapps
+    environment:
+      - JAVA_OPTS=-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true
+
+networks:
+  tomcat_net:
+    driver: bridge

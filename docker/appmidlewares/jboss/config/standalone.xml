@@ -1,0 +1,15 @@
+<server-identities>
+    <ssl>
+        <keystore path="/etc/pki/tls/private/wildfly-keystore.jks"
+                  keystore-password="SuperSecurePass"/>
+    </ssl>
+</server-identities>
+
+<management>
+    <management-interfaces>
+        <http-interface security-realm="ManagementRealm">
+            <socket-binding http="management-http"/>
+            <inet-address value="127.0.0.1"/>
+        </http-interface>
+    </management-interfaces>
+</management>
