@@ -6,17 +6,10 @@ RUN apt-get update -yqq && apt-get install -yqq \
     modsecurity-crs \
     && rm -rf /var/lib/apt/lists/*
 
-RUN a2enmod headers
+RUN a2enmod headers security2
 
-# Enable ModSecurity
-RUN a2enmod security2 \
-    && cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf \
-    && sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/modsecurity/modsecurity.conf
-
-# Copy Configs
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
 EXPOSE 80 443
-
 CMD ["httpd-foreground"]
