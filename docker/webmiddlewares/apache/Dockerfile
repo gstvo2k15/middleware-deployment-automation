@@ -2,7 +2,7 @@ FROM httpd:2.4.57-bullseye
 
 # Install ModSecurity and dependencies
 RUN apt-get update && apt-get install -y \
-    libapache2-mod-security2 \
+    libapache2-mod-security2 gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 RUN test -f /usr/lib/apache2/modules/mod_security2.so && \
@@ -16,9 +16,11 @@ RUN mkdir -p /var/log/apache2 && \
 
 RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/apache2/conf/httpd.conf
 
-COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copy configuration files but keep a template for envsubst
+COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf.template
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
 EXPOSE 80 443
 
-CMD ["httpd-foreground"]
+# Replace SERVER_NAME in httpd.conf at runtime
+ENTRYPOINT ["/bin/sh", "-c", "envsubst '$$SERVER_NAME' < /usr/local/apache2/conf/httpd.conf.template > /usr/local/apache2/conf/httpd.conf && exec httpd-foreground"]
