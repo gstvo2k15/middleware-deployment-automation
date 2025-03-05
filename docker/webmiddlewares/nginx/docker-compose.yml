@@ -17,3 +17,7 @@ services:
       - ./nginx/conf/hardening.conf:/etc/nginx/conf.d/hardening.conf:ro
       - ./nginx/conf/logging.conf:/etc/nginx/conf.d/logging.conf:ro
       - ./nginx/conf/firewall.conf:/etc/nginx/conf.d/firewall.conf:ro
+
+networks:
+  nginx_network:
+    driver: bridge
