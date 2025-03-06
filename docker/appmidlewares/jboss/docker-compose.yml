@@ -5,9 +5,11 @@ services:
       - '8080:8080'
       - '9990:9990'
     volumes:
-      - './config/standalone.xml:/bitnami/wildfly/standalone/configuration/standalone.xml'
+      - './standalone.xml:/bitnami/wildfly/standalone/configuration/standalone.xml'
     environment:
       - WILDFLY_PASSWORD=password
+      - JBOSS_BIND_ADDRESS=0.0.0.0
+      - JBOSS_BIND_ADDRESS_MANAGEMENT=0.0.0.0
 
 volumes:
   wildfly_data:
