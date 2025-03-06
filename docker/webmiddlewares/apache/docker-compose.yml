@@ -6,8 +6,8 @@ services:
       - '443:8443'
     volumes:
       - './web:/app'
-      - './config:/opt/bitnami/apache2/conf'
-      - './sites:/vhosts'
+      - './config/httpd.conf:/opt/bitnami/apache2/conf/httpd.conf'
+      - './sites/my_vhost.conf:/vhosts/my_vhost.conf'
       - './logs:/opt/bitnami/apache2/logs'
 
 volumes:

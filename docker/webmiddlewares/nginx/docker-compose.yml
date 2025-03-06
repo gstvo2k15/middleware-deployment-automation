@@ -6,9 +6,9 @@ services:
       - '443:443'
     volumes:
       - './web:/app'
-      - 'config:/opt/bitnami/nginx/conf'
-      - 'sites:/opt/bitnami/nginx/conf/server_blocks'
-      - 'logs:/opt/bitnami/nginx/logs'
+      - './config/nginx.conf:/opt/bitnami/nginx/conf/nginx.conf'
+      - './sites:/opt/bitnami/nginx/conf/server_blocks'
+      - './logs:/opt/bitnami/nginx/logs'
 
 volumes:
   nginx_data:
