@@ -1,6 +1,6 @@
 services:
   apache:
-    image: 'bitnami/apache:latest'
+    image: 'bitnami/apache:2.4.63'
     ports:
       - '80:8080'
       - '443:8443'
