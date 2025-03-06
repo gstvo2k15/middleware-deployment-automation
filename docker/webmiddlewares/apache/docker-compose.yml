@@ -8,8 +8,6 @@ services:
       - './web:/app'
       - './config/httpd.conf:/opt/bitnami/apache2/conf/httpd.conf'
       - './sites/my_vhost.conf:/vhosts/my_vhost.conf'
-      - './logs/access_log:/opt/bitnami/apache/logs/access_log.'
-      - './logs/error_log:/opt/bitnami/apache/logs/error_log.'
 
 volumes:
   apache_data:
