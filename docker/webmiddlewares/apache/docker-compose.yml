@@ -12,13 +12,11 @@ services:
       - ./config/extra/:/usr/local/apache2/conf/extra/:ro
       - ./www:/usr/local/apache2/htdocs
       - ./logs:/usr/local/apache2/logs
-      - ./certs:/etc/apache2/ssl
     environment:
       TZ: "Europe/Madrid"
-      ENABLE_SSL: "true"
       SERVER_NAME: "apache.local"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
       timeout: 10s
       retries: 5

@@ -23,14 +23,22 @@ RUN echo "LoadModule security2_module modules/mod_security2.so" >> /usr/local/ap
 COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY config/extra/ /usr/local/apache2/conf/extra/
 
-# Generar certificados autofirmados si no existen
+# Crear directorio para los certificados
+RUN mkdir -p /usr/local/apache2/conf/ssl
+
+# Generar certificado SSL autofirmado
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt \
-    -subj "/C=ES/ST=Madrid/L=Madrid/O=MiEmpresa/CN=apache.local"
+    -keyout /usr/local/apache2/conf/ssl/apache.key \
+    -out /usr/local/apache2/conf/ssl/apache.crt \
+    -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=apache.local"
 
 # Configurar Apache para utilizar SSL
 RUN echo "SSLCertificateFile /etc/apache2/ssl/apache.crt" >> /usr/local/apache2/conf/extra/ssl.conf && \
     echo "SSLCertificateKeyFile /etc/apache2/ssl/apache.key" >> /usr/local/apache2/conf/extra/ssl.conf
+
+# Configurar VirtualHost para HTTPS
+COPY config/ssl.conf /usr/local/apache2/conf/extra/ssl.conf
+RUN echo "Include conf/extra/ssl.conf" >> /usr/local/apache2/conf/httpd.conf
 
 EXPOSE 80 443
 
