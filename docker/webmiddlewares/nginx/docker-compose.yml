@@ -2,8 +2,8 @@ services:
   nginx:
     image: 'docker.io/bitnami/nginx:1.27'
     ports:
-      - '80:8181'
+      - '80:8080'
       - '443:8443'
     volumes:
       - ./config/my_server_block.conf:/opt/bitnami/nginx/conf.default/stream_server_blocks/my_server_block.conf:ro
-      #/opt/bitnami/nginx/conf.default/bitnami/certs
+      - ./web:/app 
