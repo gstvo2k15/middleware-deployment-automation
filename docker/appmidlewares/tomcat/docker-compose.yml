@@ -11,7 +11,7 @@ services:
       - TOMCAT_USERNAME=admin
       - TOMCAT_PASSWORD=SuperPasswordSegura123
       - TOMCAT_ALLOW_REMOTE_MANAGEMENT=yes
-      - TOMCAT_HTTP_PORT_NUMBER=8080
+      - TOMCAT_ENABLE_MGMT_APPS=yes
 volumes:
   tomcat_data:
     driver: local
