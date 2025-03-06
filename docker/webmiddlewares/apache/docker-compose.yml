@@ -5,11 +5,10 @@ services:
       - '80:8080'
       - '443:8443'
     volumes:
-      - ./web:/app
+      - './web:/app'
       - './config:/opt/bitnami/apache2/conf'
       - './sites:/vhosts'
       - './logs:/opt/bitnami/apache2/logs'
-      - './htdocs:/opt/bitnami/apache2/htdocs'
 
 volumes:
   apache_data:
