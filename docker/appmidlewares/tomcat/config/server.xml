@@ -21,13 +21,7 @@
         </Connector>
 
         <Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
-         <Context path="/uvc" docBase="univiewer_webconsole_7.00.21.war" debug="0" reloadable="true"/>
+            <Context path="/uvc" docBase="univiewer_webconsole_7.00.21.war" debug="0" reloadable="true"/>
         </Host>
-
-        <Engine name="Catalina" defaultHost="localhost">
-            <Host name="localhost" appBase="webapps"
-                  unpackWARs="true" autoDeploy="false">
-            </Host>
-        </Engine>
     </Service>
 </Server>
