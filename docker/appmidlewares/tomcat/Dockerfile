@@ -3,12 +3,10 @@ FROM tomcat:9.0-jdk11-temurin
 # Crear usuario sin privilegios
 RUN groupadd -r tomcat && useradd -r -g tomcat -d /usr/local/tomcat tomcat
 
-# Generar keystore dentro del contenedor si no existe
-RUN if [ ! -f /usr/local/tomcat/conf/keystore.jks ]; then \
-      keytool -genkey -alias tomcat -keyalg RSA -keystore /usr/local/tomcat/conf/keystore.jks \
-      -storepass changeme -keypass changeme -validity 3650 -keysize 4096 \
-      -dname "CN=localhost, OU=Security, O=Company, L=City, S=State, C=US"; \
-    fi
+# Ajustar permisos
+RUN chown -R tomcat:tomcat /usr/local/tomcat/conf \
+    && chmod 600 /usr/local/tomcat/conf/tomcat-key.pem \
+    && chmod 644 /usr/local/tomcat/conf/tomcat-cert.pem
 
 # Ajustar permisos
 RUN chown -R tomcat:tomcat /usr/local/tomcat \
