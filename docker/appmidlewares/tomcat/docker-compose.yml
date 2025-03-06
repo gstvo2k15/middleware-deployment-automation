@@ -4,7 +4,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - './tomcat_data:/bitnami/tomcat'
+      - 'tomcat_data:/bitnami/tomcat'
       - '/root/uvc.war:/bitnami/tomcat/webapps/uvc.war'
     environment:
       - ALLOW_EMPTY_PASSWORD=no
