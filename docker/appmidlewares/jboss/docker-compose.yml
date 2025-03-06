@@ -5,7 +5,7 @@ services:
       - '8080:8080'
       - '9990:9990'
     volumes:
-      - './standalone.xml:/bitnami/wildfly/standalone/configuration/standalone.xml'
+      - './config/standalone.xml:/bitnami/wildfly/standalone/configuration/standalone.xml'
     environment:
       - WILDFLY_PASSWORD=password
 
