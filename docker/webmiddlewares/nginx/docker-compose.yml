@@ -5,4 +5,5 @@ services:
       - '80:8181'
       - '443:8443'
     volumes:
-      - ./config/my_server_block.conf:/opt/bitnami/nginx/conf/conf.d/server_blocks/my_server_block.conf:ro
+      - ./config/my_server_block.conf:/opt/bitnami/nginx/conf.default/stream_server_blocks/my_server_block.conf:ro
+      #/opt/bitnami/nginx/conf.default/bitnami/certs
