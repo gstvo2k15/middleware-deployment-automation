@@ -6,3 +6,4 @@ services:
       - '443:8443'
     volumes:
       - .my_vhost.conf:/vhosts/my_vhost.conf:ro
+      - ./web:/app
