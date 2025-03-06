@@ -5,5 +5,12 @@ services:
       - '80:8080'
       - '443:8443'
     volumes:
-      - .my_vhost.conf:/vhosts/my_vhost.conf:ro
       - ./web:/app
+      - './config:/opt/bitnami/apache2/conf'
+      - './sites:/vhosts'
+      - './logs:/opt/bitnami/apache2/logs'
+      - './htdocs:/opt/bitnami/apache2/htdocs'
+
+volumes:
+  apache_data:
+    driver: local

@@ -5,6 +5,11 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - ./config/nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
-      - ./config/my_server_block.conf:/opt/bitnami/nginx/conf/server_blocks/my_server_block.conf:ro
+      - './config:/opt/bitnami/nginx/conf'
+      - './sites:/opt/bitnami/nginx/conf/server_blocks'
+      - './logs:/opt/bitnami/nginx/logs'
       - ./web:/app
+
+volumes:
+  nginx_data:
+    driver: local
