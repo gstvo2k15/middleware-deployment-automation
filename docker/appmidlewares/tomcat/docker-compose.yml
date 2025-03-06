@@ -1,6 +1,6 @@
 services:
   tomcat:
-    image: docker.io/bitnami/tomcat:10.1
+    image: docker.io/bitnami/tomcat:9.0.98
     ports:
       - '8080:8080'
     volumes:
