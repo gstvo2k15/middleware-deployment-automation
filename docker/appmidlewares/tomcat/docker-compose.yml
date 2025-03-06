@@ -5,9 +5,13 @@ services:
       - '8080:8080'
     volumes:
       - 'tomcat_data:/bitnami/tomcat'
+      - '/root/uvc.war:/bitnami/tomcat/webapps/uvc.war'
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-
+      - ALLOW_EMPTY_PASSWORD=no
+      - TOMCAT_USERNAME=admin
+      - TOMCAT_PASSWORD=SuperPasswordSegura123
+      - TOMCAT_ALLOW_REMOTE_MANAGEMENT=yes
+      - TOMCAT_HTTP_PORT_NUMBER=8080
 volumes:
   tomcat_data:
     driver: local
