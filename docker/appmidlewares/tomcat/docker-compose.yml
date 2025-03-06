@@ -4,9 +4,8 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - './deployments:/bitnami/tomcat/webapps'
-      - './logs:/bitnami/tomcat/logs'
-      - './config:/bitnami/tomcat/conf'
+      - './tomcat_data:/bitnami/tomcat'
+      - '/root/uvc.war:/bitnami/tomcat/webapps/uvc.war'
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - TOMCAT_USERNAME=admin
