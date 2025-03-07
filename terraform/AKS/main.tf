@@ -7,7 +7,8 @@ module "network" {
   address_space       = var.address_space
   subnet_prefix       = var.subnet_prefix
   vnet_id             = var.vnet_id
-  subnet_id           = var.subnet_id   
+  subnet_id           = var.subnet_id
+  subscription_id     = var.subscription_id
 }
 
 module "aks" {

@@ -37,3 +37,8 @@ variable "subnet_id" {
   description = "Subnet ID for AKS"
   type        = string
 }
+
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+}
