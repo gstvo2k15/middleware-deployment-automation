@@ -15,7 +15,7 @@ module "aks" {
   cluster_name        = var.cluster_name
   node_count          = var.node_count
   vm_size             = var.vm_size
-  subnet_id           = var.subnet_id
+  subnet_id           = var.subnet_id != "" ? var.subnet_id : output.subnet_id_computed
   tenant_id           = var.tenant_id
   client_id           = var.client_id
 }
