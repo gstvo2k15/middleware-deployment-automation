@@ -1,1 +1,17 @@
-# Placeholder for ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarqube-ingress
+  namespace: sonarqube
+spec:
+  rules:
+    - host: sonarqube.middleware.mycompany.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sonarqube
+                port:
+                  number: 9000

@@ -1,1 +1,18 @@
-# Placeholder for tomcat.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tomcat-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/myorg/middleware-k8s.git'
+    path: manifests/tomcat
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: middleware
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

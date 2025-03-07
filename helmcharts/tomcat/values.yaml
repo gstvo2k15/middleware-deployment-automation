@@ -1,1 +1,8 @@
-# Placeholder for values.yaml
+
+replicaCount: 2
+image:
+  repository: middlewareacr.azurecr.io/middleware/tomcat
+  tag: latest
+service:
+  type: ClusterIP
+  port: 8080

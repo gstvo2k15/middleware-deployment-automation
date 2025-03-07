@@ -1,1 +1,4 @@
-# Placeholder for Chart.yaml
+apiVersion: v2
+name: sonarqube
+version: 1.0.0
+description: Helm Chart para desplegar SonarQube en Kubernetes

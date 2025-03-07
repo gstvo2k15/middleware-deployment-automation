@@ -1,0 +1,4 @@
+apiVersion: v2
+name: nginx
+version: 1.0.0
+description: Helm Chart para desplegar Nginx como Reverse Proxy en Kubernetes

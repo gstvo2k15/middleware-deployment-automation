@@ -1,1 +1,5 @@
-# Placeholder for Chart.yaml
+
+apiVersion: v2
+name: tomcat
+version: 1.0.0
+description: Tomcat Server in Kubernetes

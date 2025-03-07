@@ -1,18 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: wildfly
+  name: nginx-app
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/myorg/middleware-k8s.git'
-    path: manifests/wildfly
+    repoURL: 'https://github.com/mi-repo/k8s-manifests.git'
+    path: manifests/nginx
     targetRevision: HEAD
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: middleware
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
+    namespace: nginx

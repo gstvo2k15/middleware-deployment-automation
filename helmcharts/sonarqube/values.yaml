@@ -1,1 +1,38 @@
-# Placeholder for values.yaml
+replicaCount: 1
+
+image:
+  repository: sonarqube
+  tag: latest
+  pullPolicy: IfNotPresent
+
+persistence:
+  enabled: true
+  existingClaim: sonarqube-pvc
+
+service:
+  type: LoadBalancer
+  port: 9000
+
+ingress:
+  enabled: true
+  hosts:
+    - host: sonarqube.middleware.mycompany.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+resources:
+  limits:
+    cpu: "2"
+    memory: "4Gi"
+  requests:
+    cpu: "1"
+    memory: "2Gi"
+
+env:
+  - name: SONAR_JDBC_URL
+    value: "jdbc:postgresql://sonarqube-db.postgres.database.azure.com:5432/sonarqube"
+  - name: SONAR_JDBC_USERNAME
+    value: "adminuser"
+  - name: SONAR_JDBC_PASSWORD
+    value: "SuperSecurePassword123"

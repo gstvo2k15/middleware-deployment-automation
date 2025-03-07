@@ -1,1 +1,4 @@
-# Placeholder for Chart.yaml
+apiVersion: v2
+name: wildfly
+version: 1.0.0
+description: Helm Chart para desplegar WildFly en Kubernetes

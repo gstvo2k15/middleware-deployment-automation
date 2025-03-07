@@ -1,1 +1,19 @@
-# Placeholder for install-k8s.yml
+- name: Installl k8s in nodes
+  hosts: k8s_nodes
+  become: true
+  tasks:
+    - name: Install required packages of k8s
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: Start Kubernetes
+      command: kubeadm init --pod-network-cidr=192.168.1.0/24
+      when: inventory_hostname == "master-node"
+
+    - name: Config kubeconfig
+      command: mkdir -p $HOME/.kube && cp /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config
+      when: inventory_hostname == "master-node"

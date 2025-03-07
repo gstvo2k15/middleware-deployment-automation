@@ -1,1 +1,13 @@
-# Placeholder for service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  selector:
+    app: sonarqube
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+  type: LoadBalancer

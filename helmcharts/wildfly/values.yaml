@@ -1,1 +1,26 @@
-# Placeholder for values.yaml
+replicaCount: 2
+
+image:
+  repository: middlewareacr.azurecr.io/middleware/wildfly
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  hosts:
+    - host: wildfly.middleware.mycompany.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: "1"
+    memory: "2Gi"
+  requests:
+    cpu: "500m"
+    memory: "1Gi"

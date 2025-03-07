@@ -1,1 +1,18 @@
-# Placeholder for sonarqube.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/myorg/middleware-k8s.git'
+    path: manifests/sonarqube
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: sonarqube
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

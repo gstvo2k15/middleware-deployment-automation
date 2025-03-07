@@ -1,1 +1,44 @@
-# Placeholder for Jenkinsfile
+pipeline {
+    agent any
+    environment {
+        SONAR_SERVER = 'http://sonarqube.middleware.mycompany.com'
+        SONAR_TOKEN = credentials('sonarqube-token')
+        ACR_NAME = 'middlewareacr.azurecr.io'
+        K8S_NAMESPACE = 'middleware'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/myorg/middleware-k8s.git'
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                sh './scripts/build.sh'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                sh './scripts/sonar-scan.sh'
+            }
+        }
+        stage('Build & Push Docker Image') {
+            steps {
+                sh './scripts/deploy.sh'
+            }
+        }
+        stage('Update Helm Chart') {
+            steps {
+                sh 'helm upgrade --install middleware helmcharts/middleware -n $K8S_NAMESPACE'
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Despliegue exitoso en AKS'
+        }
+        failure {
+            echo 'Error en el pipeline'
+        }
+    }
+}

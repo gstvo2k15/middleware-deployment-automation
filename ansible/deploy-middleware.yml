@@ -1,1 +1,14 @@
-# Placeholder for deploy-middleware.yml
+- name: Desplegar Middleware en AKS
+  hosts: localhost
+  tasks:
+    - name: Crear ConfigMap para Tomcat
+      command: kubectl apply -f k8s/tomcat/configmap.yaml
+
+    - name: Desplegar Tomcat en AKS
+      command: kubectl apply -f k8s/tomcat/deployment.yaml
+
+    - name: Crear ConfigMap para WildFly
+      command: kubectl apply -f k8s/wildfly/configmap.yaml
+
+    - name: Desplegar WildFly en AKS
+      command: kubectl apply -f k8s/wildfly/deployment.yaml

@@ -1,1 +1,11 @@
-# Ansible Playbook
+- name: Configuración de AKS y Middleware
+  hosts: localhost
+  tasks:
+    - name: Instalar herramientas necesarias en AKS
+      command: az aks install-cli
+
+    - name: Configurar credenciales de Kubernetes
+      command: az aks get-credentials --resource-group middleware-rg --name middleware-aks
+
+    - name: Ejecutar despliegue de middleware
+      import_playbook: deploy-middleware.yml
