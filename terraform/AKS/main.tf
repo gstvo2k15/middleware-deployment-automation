@@ -15,7 +15,7 @@ module "aks" {
   cluster_name        = var.cluster_name
   node_count          = var.node_count
   vm_size             = var.vm_size
-  vnet_id             = module.network.vnet_id
+  vnet_id             = module.network.aks_subnet_id
 }
 
 module "acr" {

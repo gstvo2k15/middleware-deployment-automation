@@ -27,3 +27,13 @@ variable "vnet_id" {
   description = "Virtual network ID for AKS"
   type        = string
 }
+
+variable "tenant_id" {
+  description = "Azure Tenant ID"
+  type        = string
+}
+
+variable "client_id" {
+  description = "Azure Service Principal Client ID"
+  type        = string
+}
