@@ -15,9 +15,9 @@ module "aks" {
   cluster_name        = var.cluster_name
   node_count          = var.node_count
   vm_size             = var.vm_size
-  vnet_id             = module.network.aks_subnet_id
-  tenant_id         = var.tenant_id
-  client_id         = var.client_id  
+  subnet_id           = module.network.aks_subnet_id
+  tenant_id           = var.tenant_id
+  client_id           = var.client_id
 }
 
 module "acr" {
@@ -34,4 +34,5 @@ module "sonarqube" {
   database_name       = var.database_name
   admin_username      = var.admin_username
   admin_password      = var.admin_password
+  aks_cluster_id      = module.aks.cluster_id
 }

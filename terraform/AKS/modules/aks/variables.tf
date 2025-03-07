@@ -37,3 +37,8 @@ variable "client_id" {
   description = "Azure Service Principal Client ID"
   type        = string
 }
+
+variable "subnet_id" {
+  description = "Subnet ID for AKS"
+  type        = string
+}

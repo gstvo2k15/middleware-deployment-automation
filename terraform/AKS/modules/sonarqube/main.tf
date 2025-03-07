@@ -38,6 +38,6 @@ resource "kubernetes_persistent_volume_claim" "sonarqube_pvc" {
     }
   }
 
-  depends_on = [module.aks]
+  depends_on = [azurerm_kubernetes_cluster.aks]
 
 }

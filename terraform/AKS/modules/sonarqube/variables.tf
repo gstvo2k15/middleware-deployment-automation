@@ -18,3 +18,8 @@ variable "admin_password" {
   type      = string
   sensitive = true
 }
+
+variable "aks_cluster_id" {
+  description = "AKS Cluster ID"
+  type        = string
+}
