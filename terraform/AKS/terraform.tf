@@ -19,8 +19,8 @@ terraform {
   }
   backend "azurerm" {
     resource_group_name  = "middleware-rg"
-    storage_account_name = "middlewaretfstate"
-    container_name       = "tfstate"
+    storage_account_name = "golmolabtfstate"
+    container_name       = "akstfstate"
     key                  = "aks.tfstate"
   }
 }
