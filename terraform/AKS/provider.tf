@@ -1,1 +1,3 @@
-# Placeholder for provider.tf
+provider "azurerm" {
+  features {}
+}

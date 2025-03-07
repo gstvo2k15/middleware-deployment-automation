@@ -1,5 +1,10 @@
-provider "azurerm" {
-  features {}
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "middleware-rg"
+    storage_account_name = "middlewaretfstate"
+    container_name       = "tfstate"
+    key                  = "aks.tfstate"
+  }
 }
 
 resource "azurerm_resource_group" "middleware_rg" {
@@ -7,29 +12,23 @@ resource "azurerm_resource_group" "middleware_rg" {
   location = "East US"
 }
 
-# Creación de AKS
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "middleware-aks"
-  location            = azurerm_resource_group.middleware_rg.location
+module "network" {
+  source              = "./modules/network"
   resource_group_name = azurerm_resource_group.middleware_rg.name
-  dns_prefix          = "middleware"
-
-  default_node_pool {
-    name       = "default"
-    node_count = 3
-    vm_size    = "Standard_D2s_v3"
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
 }
 
-# Creación de Azure Container Registry (ACR)
-resource "azurerm_container_registry" "acr" {
-  name                = "middlewareacr"
+module "aks" {
+  source              = "./modules/aks"
   resource_group_name = azurerm_resource_group.middleware_rg.name
-  location            = azurerm_resource_group.middleware_rg.location
-  sku                 = "Standard"
-  admin_enabled       = true
+  vnet_id             = module.network.vnet_id
+}
+
+module "acr" {
+  source              = "./modules/acr"
+  resource_group_name = azurerm_resource_group.middleware_rg.name
+}
+
+module "sonarqube" {
+  source              = "./modules/sonarqube"
+  resource_group_name = azurerm_resource_group.middleware_rg.name
 }

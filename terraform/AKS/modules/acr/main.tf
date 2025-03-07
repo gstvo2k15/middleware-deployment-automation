@@ -1,8 +1,11 @@
-
 resource "azurerm_container_registry" "acr" {
   name                = "middlewareacr"
-  resource_group_name = azurerm_resource_group.middleware_rg.name
-  location            = azurerm_resource_group.middleware_rg.location
+  resource_group_name = var.resource_group_name
+  location            = var.location
   sku                 = "Standard"
   admin_enabled       = true
+}
+
+output "acr_login_server" {
+  value = azurerm_container_registry.acr.login_server
 }
