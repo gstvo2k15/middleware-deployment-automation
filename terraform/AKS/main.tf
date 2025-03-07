@@ -15,7 +15,7 @@ module "aks" {
   cluster_name        = var.cluster_name
   node_count          = var.node_count
   vm_size             = var.vm_size
-  subnet_id           = data.azurerm_subnet.aks_subnet.id
+  subnet_id           = module.network.subnet_id
   tenant_id           = var.tenant_id
   client_id           = var.client_id
 
