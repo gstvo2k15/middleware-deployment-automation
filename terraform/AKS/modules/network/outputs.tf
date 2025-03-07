@@ -1,4 +1,4 @@
 output "subnet_id" {
   description = "Subnet ID for AKS"
-  value       = azurerm_subnet.aks_subnet.id
+  value       = var.subnet_id
 }
