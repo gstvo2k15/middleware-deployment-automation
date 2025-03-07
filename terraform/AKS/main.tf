@@ -18,8 +18,6 @@ module "aks" {
   subnet_id           = module.network.subnet_id
   tenant_id           = var.tenant_id
   client_id           = var.client_id
-
-  depends_on = [module.network]
 }
 
 data "azurerm_subnet" "aks_subnet" {
