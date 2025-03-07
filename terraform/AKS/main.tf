@@ -15,9 +15,17 @@ module "aks" {
   cluster_name        = var.cluster_name
   node_count          = var.node_count
   vm_size             = var.vm_size
-  subnet_id           = module.network.subnet_id
+  subnet_id           = data.azurerm_subnet.aks_subnet.id
   tenant_id           = var.tenant_id
   client_id           = var.client_id
+
+  depends_on = [module.network]
+}
+
+data "azurerm_subnet" "aks_subnet" {
+  name                 = var.subnet_name
+  virtual_network_name = var.vnet_name
+  resource_group_name  = var.resource_group_name
 }
 
 module "acr" {

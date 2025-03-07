@@ -99,4 +99,9 @@ variable "client_id" {
 variable "subnet_id" {
   description = "Subnet ID for AKS"
   type        = string
+
+  validation {
+    condition     = length(var.subnet_id) > 0
+    error_message = "subnet_id cannot be empty"
+  }
 }
