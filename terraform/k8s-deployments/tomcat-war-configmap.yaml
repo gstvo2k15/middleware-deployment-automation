@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tomcat-war-config
+data:
+  hello.war: |
+    <web-app>
+      <display-name>Hello AKS</display-name>
+      <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+      </servlet>
+      <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+      </servlet-mapping>
+    </web-app>

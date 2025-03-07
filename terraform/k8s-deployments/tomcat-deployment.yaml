@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  namespace: tomcat
+  labels:
+    app: tomcat
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: middlewareacr.azurecr.io/tomcat-uvc:uvcbeta1
+        ports:
+        - containerPort: 8080
+
