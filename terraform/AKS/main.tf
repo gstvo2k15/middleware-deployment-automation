@@ -16,6 +16,8 @@ module "aks" {
   node_count          = var.node_count
   vm_size             = var.vm_size
   vnet_id             = module.network.aks_subnet_id
+  tenant_id         = var.tenant_id
+  client_id         = var.client_id  
 }
 
 module "acr" {
