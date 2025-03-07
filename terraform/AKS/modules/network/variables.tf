@@ -28,6 +28,11 @@ variable "subnet_prefix" {
   type        = list(string)
 }
 
+variable "vnet_id" {
+  description = "Virtual network ID for AKS"
+  type        = string
+}
+
 variable "subnet_id" {
   description = "Subnet ID for AKS"
   type        = string
