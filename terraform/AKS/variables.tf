@@ -58,23 +58,6 @@ variable "subnet_prefix" {
   default     = ["10.0.1.0/24"]
 }
 
-variable "database_name" {
-  description = "SonarQube database name"
-  type        = string
-  default     = "sonarqube-db"
-}
-
-variable "admin_username" {
-  description = "Database admin username"
-  type        = string
-}
-
-variable "admin_password" {
-  description = "Database admin password"
-  type        = string
-  sensitive   = true
-}
-
 variable "client_secret" {
   description = "Azure Service Principal Client Secret"
   type        = string

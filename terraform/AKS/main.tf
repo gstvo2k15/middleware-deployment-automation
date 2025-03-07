@@ -37,13 +37,3 @@ module "acr" {
   location            = var.location
   acr_name            = var.acr_name
 }
-
-module "sonarqube" {
-  source              = "./modules/sonarqube"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  database_name       = var.database_name
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
-  aks_cluster_id      = module.aks.cluster_id
-}
