@@ -1,8 +1,8 @@
 resource "azurerm_virtual_network" "middleware_vnet" {
-  name                = "middleware-vnet"
-  location            = var.location
+  name                = var.vnet_name
   resource_group_name = var.resource_group_name
-  address_space       = ["10.0.0.0/16"]
+  location            = var.location
+  address_space       = var.address_space
 }
 
 resource "azurerm_subnet" "aks_subnet" {
