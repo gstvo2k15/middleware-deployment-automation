@@ -99,9 +99,10 @@ variable "client_id" {
 variable "subnet_id" {
   description = "Subnet ID for AKS"
   type        = string
+  default     = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.vnet_name}/subnets/${var.subnet_name}"
 
   validation {
     condition     = length(var.subnet_id) > 0
-    error_message = "subnet_id cannot be empty"
+    error_message = "subnet_id cannot be empty."
   }
 }
