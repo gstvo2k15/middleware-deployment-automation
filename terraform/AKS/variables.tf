@@ -96,16 +96,6 @@ variable "client_id" {
   type        = string
 }
 
-variable "subnet_id" {
-  description = "Subnet ID for AKS"
-  type        = string
-}
-
-output "subnet_id_computed" {
-  description = "Computed Subnet ID for AKS"
-  value       = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}/providers/Microsoft.Network/virtualNetworks/${var.vnet_name}/subnets/${var.subnet_name}"
-}
-
 variable "vnet_id" {
   description = "Virtual Network ID"
   type        = string
