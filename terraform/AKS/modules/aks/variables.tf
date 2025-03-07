@@ -22,3 +22,8 @@ variable "vm_size" {
   description = "VM size for AKS nodes"
   type        = string
 }
+
+variable "vnet_id" {
+  description = "Virtual network ID for AKS"
+  type        = string
+}

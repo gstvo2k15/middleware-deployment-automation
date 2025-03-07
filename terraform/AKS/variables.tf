@@ -57,3 +57,21 @@ variable "subnet_prefix" {
   type        = list(string)
   default     = ["10.0.1.0/24"]
 }
+
+variable "database_name" {
+  description = "SonarQube database name"
+  type        = string
+  default     = "sonarqube-db"
+}
+
+variable "admin_username" {
+  description = "Database admin username"
+  type        = string
+  default     = "adminuser"
+}
+
+variable "admin_password" {
+  description = "Database admin password"
+  type        = string
+  sensitive   = true
+}

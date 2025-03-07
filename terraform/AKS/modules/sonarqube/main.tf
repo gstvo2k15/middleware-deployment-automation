@@ -24,10 +24,12 @@ resource "kubernetes_persistent_volume_claim" "sonarqube_pvc" {
   metadata {
     name = "sonarqube-pvc"
   }
+
   spec {
     access_modes = ["ReadWriteOnce"]
+
     resources {
-      requests {
+      requests = {
         storage = "10Gi"
       }
     }
