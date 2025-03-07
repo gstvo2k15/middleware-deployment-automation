@@ -6,7 +6,7 @@ module "network" {
   subnet_name         = var.subnet_name
   address_space       = var.address_space
   subnet_prefix       = var.subnet_prefix
-  vnet_id             = module.network.vnet_id
+  vnet_id             = var.vnet_id
   subnet_id           = var.subnet_id
   subscription_id     = var.subscription_id
 }
@@ -28,6 +28,7 @@ data "azurerm_subnet" "aks_subnet" {
   name                 = var.subnet_name
   virtual_network_name = var.vnet_name
   resource_group_name  = var.resource_group_name
+  depends_on           = [module.network]
 }
 
 module "acr" {
