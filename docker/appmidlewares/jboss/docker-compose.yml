@@ -6,7 +6,7 @@ services:
       - 9990:9990
     volumes:
       - wildfly_data:/bitnami/wildfly
-      - ./app/:/bitnami/wildfly/standalone/deployments/
+      - ./app/:/opt/bitnami/wildfly/standalone/deployments/
     environment:
       - WILDFLY_USERNAME=admin
       - WILDFLY_PASSWORD=SuperPasswordSegura123
