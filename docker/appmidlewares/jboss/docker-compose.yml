@@ -2,12 +2,11 @@ services:
   wildfly:
     image: docker.io/bitnami/wildfly:35
     ports:
-      - 8080:8080
-      - 9990:9990
+      - '8080:8080'
+      - '9990:9990'
     volumes:
-      - wildfly_data:/bitnami/wildfly
-      - ./config:/bitnami/wildfly/standalone/configuration
-      - ./app/app-test.war:/bitnami/wildfly/standalone/deployments/app-test.war
+      - 'wildfly_data:/bitnami/wildfly'
+      - './app/app-test.war:/bitnami/wildfly/standalone/deployments/app-test.war'
     environment:
       - WILDFLY_USERNAME=admin
       - WILDFLY_PASSWORD=SuperPasswordSegura123
@@ -18,4 +17,3 @@ services:
 volumes:
   wildfly_data:
     driver: local
-

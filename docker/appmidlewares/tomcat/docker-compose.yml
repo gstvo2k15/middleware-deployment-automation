@@ -16,4 +16,3 @@ services:
 volumes:
   tomcat_data:
     driver: local
-
