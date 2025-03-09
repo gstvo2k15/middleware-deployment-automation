@@ -1,0 +1,5 @@
+<security>
+  <MaxLoginAttempts>5</MaxLoginAttempts>
+  <LockoutResetDuration>30</LockoutResetDuration>
+  <EnableAuditing>true</EnableAuditing>
+</security>

@@ -1,0 +1,14 @@
+services:
+  nginx:
+    image: 'docker.io/bitnami/nginx:1.27.4'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./config/nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
+      - ./sites/my_server_block.conf:/opt/bitnami/nginx/conf/server_blocks/my_server_block.conf:ro
+      - ./web:/app
+
+volumes:
+  nginx_data:
+    driver: local

@@ -1,0 +1,14 @@
+services:
+  apache:
+    image: 'bitnami/apache:2.4.63'
+    ports:
+      - '80:8080'
+      - '443:8443'
+    volumes:
+      - './web:/app'
+      - './config/httpd.conf:/opt/bitnami/apache2/conf/httpd.conf'
+      - './sites/my_vhost.conf:/vhosts/my_vhost.conf'
+
+volumes:
+  apache_data:
+    driver: local

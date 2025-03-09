@@ -1,0 +1,14 @@
+services:
+  tomcat:
+    image: docker.io/bitnami/tomcat:9.0.98
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/root/uvc.war:/bitnami/tomcat/webapps/uvc.war"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - TOMCAT_USERNAME=admin
+      - TOMCAT_PASSWORD=SuperPasswordSegura123
+      - TOMCAT_ALLOW_REMOTE_MANAGEMENT=yes
+      - TOMCAT_ENABLE_MGMT_APPS=yes
+

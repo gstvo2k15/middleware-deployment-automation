@@ -1,0 +1,5 @@
+<weblogic-configuration>
+  <T3ProtocolEnabled>false</T3ProtocolEnabled>
+  <TLSProtocols>TLSv1.3</TLSProtocols>
+  <EnableSecurityAudit>true</EnableSecurityAudit>
+</weblogic-configuration>
