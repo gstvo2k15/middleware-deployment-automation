@@ -2,10 +2,10 @@ services:
   tomcat:
     image: docker.io/bitnami/tomcat:9.0.98
     ports:
-      - '8080:8080'
+      - 8080:8080
     volumes:
-      - 'tomcat_data:/bitnami/tomcat'
-      - '/root/uvc.war:/bitnami/tomcat/webapps/uvc.war'
+      - tomcat_data:/bitnami/tomcat
+      - ./app/:/bitnami/tomcat/webapps/
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - TOMCAT_USERNAME=admin
