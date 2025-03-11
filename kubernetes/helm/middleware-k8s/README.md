@@ -19,7 +19,7 @@ kubectl apply -f manifests/metallb-config.yaml
 ```sh
 kubectl create namespace cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-kubectl create secret generic duckdns-api-key   --namespace cert-manager   --from-literal=token='YOUR_DUCKDNS_TOKEN'
+kubectl create secret generic duckdns-api-key --namespace cert-manager --from-literal=token='YOUR_DUCKDNS_TOKEN'
 kubectl apply -f manifests/cert-manager.yaml
 kubectl apply -f manifests/certificate.yaml
 ```
