@@ -1,0 +1,15 @@
+replicaCount: 2
+
+image:
+  repository: jboss/wildfly
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  host: jboss.local
+  path: /

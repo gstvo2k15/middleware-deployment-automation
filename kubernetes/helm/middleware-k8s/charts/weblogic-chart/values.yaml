@@ -1,0 +1,15 @@
+replicaCount: 2
+
+image:
+  repository: store/oracle/weblogic
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 7001
+
+ingress:
+  enabled: true
+  host: weblogic.local
+  path: /

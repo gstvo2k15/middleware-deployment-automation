@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: middleware-app
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/tu-org/middleware-k8s.git"
+    targetRevision: main
+    path: charts/
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

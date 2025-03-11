@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker build -t my-registry/tomcat:latest ./charts/tomcat-chart/'
+                sh 'docker push my-registry/tomcat:latest'
+            }
+        }
+        stage('Deploy to K8s') {
+            steps {
+                sh 'helm upgrade --install tomcat ./charts/tomcat-chart/ -n default'
+            }
+        }
+    }
+}

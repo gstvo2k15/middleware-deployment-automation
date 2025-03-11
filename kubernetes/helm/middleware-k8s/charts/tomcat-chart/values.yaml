@@ -1,0 +1,15 @@
+replicaCount: 2
+
+image:
+  repository: tomcat
+  tag: "9.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  host: tomcat.local
+  path: /

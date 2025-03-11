@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 3000
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: middleware-monitoring
+spec:
+  selector:
+    matchLabels:
+      app: middleware
+  endpoints:
+  - port: http
+    path: /metrics
