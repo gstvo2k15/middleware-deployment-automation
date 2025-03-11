@@ -22,11 +22,6 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-          backend:
-            service:
-              name: tomcat-service
-              port:
-                number: 80
   tls:
     - hosts:
         - tomcat.helmgolmolab.duckdns.org

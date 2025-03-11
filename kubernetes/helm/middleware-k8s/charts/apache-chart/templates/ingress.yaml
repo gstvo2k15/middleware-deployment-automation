@@ -1,24 +1,28 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: apache-ingress
+  name: {{ .Release.Name }}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
   tls:
     - hosts:
-        - {{ .Values.ingress.hosts | first }}
-      secretName: wildcard-duckdns-tls
+        {{- range .Values.ingress.hosts }}
+        - {{ .host }}
+        {{- end }}
+      secretName: {{ (index .Values.ingress.tls 0).secretName }}
   rules:
-    - host: {{ .Values.ingress.hosts | first }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: {{ .paths.0.path }}
+            pathType: {{ .paths.0.pathType }}
             backend:
               service:
-                name: apache-service
+                name: {{ $.Values.service.name }}
                 port:
-                  number: 80
+                  number: {{ $.Values.service.port }}
+    {{- end }}

@@ -22,11 +22,6 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-          backend:
-            service:
-              name: apache-service
-              port:
-                number: 80
   tls:
     - hosts:
         - apache.helmgolmolab.duckdns.org

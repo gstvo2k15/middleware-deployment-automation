@@ -18,13 +18,11 @@ spec:
     - host: {{ .host }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: {{ .paths.0.path }}
+            pathType: {{ .paths.0.pathType }}
             backend:
               service:
-                name: {{ .backend.service.name }}
+                name: {{ $.Values.service.name }}
                 port:
-                  number: {{ .backend.service.port.number }}
-          {{- end }}
+                  number: {{ $.Values.service.port }}
     {{- end }}
