@@ -43,7 +43,6 @@ helm install weblogic charts/weblogic-chart/
 kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f deployment-pipelines/argocd/app.yaml
 kubectl get crds | grep applications.argoproj.io
-
 ```
 
 ### 6️⃣ Configure Monitoring with Prometheus and Grafana

@@ -22,7 +22,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx-service
+            name: nginx
             port:
               number: 80
   - host: apache.helmgolmolab.duckdns.org
@@ -32,7 +32,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: apache-service
+            name: apache
             port:
               number: 80
   - host: tomcat.helmgolmolab.duckdns.org
@@ -42,7 +42,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: tomcat-service
+            name: tomcat
             port:
               number: 8080
   - host: jboss.helmgolmolab.duckdns.org
@@ -52,7 +52,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: jboss-service
+            name: jboss
             port:
               number: 8080
   - host: weblogic.helmgolmolab.duckdns.org
@@ -62,6 +62,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: weblogic-service
+            name: weblogic
             port:
               number: 7001
