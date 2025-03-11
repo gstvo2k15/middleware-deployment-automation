@@ -22,6 +22,11 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+          backend:
+            service:
+              name: nginx-service
+              port:
+                number: 80
   tls:
     - hosts:
         - nginx.helmgolmolab.duckdns.org

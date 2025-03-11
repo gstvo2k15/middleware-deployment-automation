@@ -3,26 +3,31 @@ namespace: middleware
 replicaCount: 2
 
 image:
-  repository: store/oracle/weblogic
+  repository: ibmcom/websphere-traditional
   tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
-  name: weblogic-service
+  name: was-service
   type: ClusterIP
-  port: 7001
+  port: 9060
 
 ingress:
   enabled: true
-  ingressClassName: weblogic
+  ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
   hosts:
-    - host: weblogic.helmgolmolab.duckdns.org
+    - host: was.helmgolmolab.duckdns.org
       paths:
         - path: /
           pathType: Prefix
+          backend:
+            service:
+              name: was-service
+              port:
+                number: 9060
   tls:
     - hosts:
-        - weblogic.helmgolmolab.duckdns.org
+        - was.helmgolmolab.duckdns.org
       secretName: wildcard-duckdns-tls

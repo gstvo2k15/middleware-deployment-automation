@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.annotations.cert-manager.io/cluster-issuer }}
 spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   tls:
@@ -12,19 +12,19 @@ spec:
         {{- range .Values.ingress.hosts }}
         - {{ .host }}
         {{- end }}
-      secretName: {{ .Values.ingress.tls | first | default "wildcard-duckdns-tls" }}
+      secretName: {{ .Values.ingress.tls.0.secretName }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}
       http:
         paths:
           {{- range .paths }}
-          - path: {{ .path | default "/" }}
-            pathType: {{ .pathType | default "Prefix" }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .backend.service.name | default $.Values.service.name }}
+                name: {{ .backend.service.name }}
                 port:
-                  number: {{ .backend.service.port.number | default $.Values.service.port }}
+                  number: {{ .backend.service.port.number }}
           {{- end }}
     {{- end }}

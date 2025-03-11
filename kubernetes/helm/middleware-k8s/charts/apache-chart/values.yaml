@@ -14,14 +14,11 @@ service:
 
 ingress:
   enabled: true
-  ingressClassName: apache
+  ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
   hosts:
-    - host: apache.helmgolmolab.duckdns.org
-      paths:
-        - path: /
-          pathType: Prefix
+    - apache.helmgolmolab.duckdns.org
   tls:
     - hosts:
         - apache.helmgolmolab.duckdns.org

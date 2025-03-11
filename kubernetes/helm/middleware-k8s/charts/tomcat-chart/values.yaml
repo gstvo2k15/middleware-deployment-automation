@@ -4,7 +4,7 @@ replicaCount: 2
 
 image:
   repository: tomcat
-  tag: "9.0"
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
@@ -14,7 +14,7 @@ service:
 
 ingress:
   enabled: true
-  ingressClassName: tomcat
+  ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
   hosts:
@@ -22,6 +22,11 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+          backend:
+            service:
+              name: tomcat-service
+              port:
+                number: 8080
   tls:
     - hosts:
         - tomcat.helmgolmolab.duckdns.org
