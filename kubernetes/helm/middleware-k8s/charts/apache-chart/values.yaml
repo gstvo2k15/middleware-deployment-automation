@@ -17,6 +17,6 @@ ingress:
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-  host: nginx.helmgolmolab.duckdns.org
+  host: apache.helmgolmolab.duckdns.org
   tls:
     - secretName: wildcard-duckdns-tls
