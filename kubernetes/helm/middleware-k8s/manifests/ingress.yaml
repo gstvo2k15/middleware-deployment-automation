@@ -3,17 +3,39 @@ kind: Ingress
 metadata:
   name: middleware-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-      - tomcat.local
-      - jboss.local
-      - weblogic.local
-    secretName: tls-secret
+      - nginx.helmgolmolab.duckdns.org
+      - apache.helmgolmolab.duckdns.org
+      - tomcat.helmgolmolab.duckdns.org
+      - jboss.helmgolmolab.duckdns.org
+      - weblogic.helmgolmolab.duckdns.org
+    secretName: wildcard-duckdns-tls
   rules:
-  - host: tomcat.local
+  - host: nginx.helmgolmolab.duckdns.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
+  - host: apache.helmgolmolab.duckdns.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: apache-service
+            port:
+              number: 80
+  - host: tomcat.helmgolmolab.duckdns.org
     http:
       paths:
       - path: /
@@ -23,7 +45,7 @@ spec:
             name: tomcat-service
             port:
               number: 8080
-  - host: jboss.local
+  - host: jboss.helmgolmolab.duckdns.org
     http:
       paths:
       - path: /
@@ -33,7 +55,7 @@ spec:
             name: jboss-service
             port:
               number: 8080
-  - host: weblogic.local
+  - host: weblogic.helmgolmolab.duckdns.org
     http:
       paths:
       - path: /

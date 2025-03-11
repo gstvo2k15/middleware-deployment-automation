@@ -11,5 +11,5 @@ service:
 
 ingress:
   enabled: true
-  host: apache.local
+  host: apache.helmgolmolab.duckdns.org
   path: /
