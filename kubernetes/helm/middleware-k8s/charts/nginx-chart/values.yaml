@@ -10,13 +10,13 @@ image:
 service:
   name: nginx-service
   type: ClusterIP
-  port: 8080
+  port: 80
 
 ingress:
   enabled: true
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-  host: tomcat.helmgolmolab.duckdns.org
+  host: nginx.helmgolmolab.duckdns.org
   tls:
     - secretName: wildcard-duckdns-tls
