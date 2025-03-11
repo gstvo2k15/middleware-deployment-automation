@@ -40,13 +40,18 @@ helm install weblogic charts/weblogic-chart/
 
 ### 5️⃣ Set Up ArgoCD for Automated Deployment
 ```sh
+kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f deployment-pipelines/argocd/app.yaml
+kubectl get crds | grep applications.argoproj.io
+
 ```
 
 ### 6️⃣ Configure Monitoring with Prometheus and Grafana
 ```sh
+kubectl apply -f https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/bundle.yaml
 kubectl apply -f monitoring/prometheus-grafana.yaml
 kubectl apply -f monitoring/loki.yaml
+kubectl get crds | grep servicemonitors.monitoring.coreos.com
 ```
 
 ## Accessing Middleware Services
