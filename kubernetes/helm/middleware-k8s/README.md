@@ -29,7 +29,18 @@ kubectl apply -f manifests/certificate.yaml
 kubectl apply -f manifests/ingress.yaml
 ```
 
-### 4️⃣ Install Middleware Helm Charts
+### 4️⃣ Deploy Middleware Services
+Create the necessary Kubernetes Services to expose middleware applications:
+
+```sh
+kubectl apply -f manifests/nginx-service.yaml
+kubectl apply -f manifests/apache-service.yaml
+kubectl apply -f manifests/tomcat-service.yaml
+kubectl apply -f manifests/jboss-service.yaml
+kubectl apply -f manifests/weblogic-service.yaml
+```
+
+Then install the Helm charts for each middleware:
 ```sh
 helm install nginx charts/nginx-chart/
 helm install apache charts/apache-chart/
@@ -40,14 +51,16 @@ helm install weblogic charts/weblogic-chart/
 
 ### 5️⃣ Set Up ArgoCD for Automated Deployment
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl apply -f deployment-pipelines/argocd/app.yaml
 kubectl get crds | grep applications.argoproj.io
 ```
 
 ### 6️⃣ Configure Monitoring with Prometheus and Grafana
 ```sh
-kubectl apply -f https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/bundle.yaml
+kubectl create namespace monitoring
+kubectl apply -n monitoring -f https://github.com/prometheus-operator/prometheus-operator/releases/latest/download/bundle.yaml
 kubectl apply -f monitoring/prometheus-grafana.yaml
 kubectl apply -f monitoring/loki.yaml
 kubectl get crds | grep servicemonitors.monitoring.coreos.com
