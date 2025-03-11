@@ -1,3 +1,5 @@
+namespace: middleware
+
 replicaCount: 2
 
 image:
@@ -6,10 +8,26 @@ image:
   pullPolicy: IfNotPresent
 
 service:
+  name: weblogic-service
   type: ClusterIP
   port: 7001
 
 ingress:
   enabled: true
-  host: weblogic.local
-  path: /
+  ingressClassName: weblogic
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: weblogic.helmgolmolab.duckdns.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: weblogic-service
+              port:
+                number: 80
+  tls:
+    - hosts:
+        - weblogic.helmgolmolab.duckdns.org
+      secretName: wildcard-duckdns-tls

@@ -1,3 +1,5 @@
+namespace: middleware
+
 replicaCount: 2
 
 image:
@@ -6,10 +8,26 @@ image:
   pullPolicy: IfNotPresent
 
 service:
+  name: nginx-service
   type: ClusterIP
   port: 80
 
 ingress:
   enabled: true
-  host: nginx.helmgolmolab.duckdns.org
-  path: /
+  ingressClassName: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: nginx.helmgolmolab.duckdns.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-service
+              port:
+                number: 80
+  tls:
+    - hosts:
+        - nginx.helmgolmolab.duckdns.org
+      secretName: wildcard-duckdns-tls

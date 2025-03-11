@@ -33,6 +33,9 @@ kubectl apply -f manifests/ingress.yaml
 Create the necessary Kubernetes Services to expose middleware applications:
 
 ```sh
+kubectl create namespace middleware
+kubectl create namespace monitoring
+
 kubectl apply -f manifests/nginx-service.yaml
 kubectl apply -f manifests/apache-service.yaml
 kubectl apply -f manifests/tomcat-service.yaml

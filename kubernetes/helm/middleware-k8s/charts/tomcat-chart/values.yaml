@@ -1,3 +1,5 @@
+namespace: middleware
+
 replicaCount: 2
 
 image:
@@ -6,10 +8,26 @@ image:
   pullPolicy: IfNotPresent
 
 service:
+  name: tomcat-service
   type: ClusterIP
   port: 8080
 
 ingress:
   enabled: true
-  host: tomcat.local
-  path: /
+  ingressClassName: tomcat
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: tomcat.helmgolmolab.duckdns.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: tomcat-service
+              port:
+                number: 80
+  tls:
+    - hosts:
+        - tomcat.helmgolmolab.duckdns.org
+      secretName: wildcard-duckdns-tls
