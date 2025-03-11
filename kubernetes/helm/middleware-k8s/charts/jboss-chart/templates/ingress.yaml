@@ -6,21 +6,19 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
-  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  ingressClassName: nginx
   tls:
     - hosts:
-        {{- range .Values.ingress.hosts }}
-        - {{ . }}
-        {{- end }}
-      secretName: {{ .Values.ingress.tls | first | default "wildcard-duckdns-tls" }}
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ . }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Values.service.name }}
+                name: {{ .Values.service.name }}
                 port:
+                  number: {{ .Values.service.port }}
