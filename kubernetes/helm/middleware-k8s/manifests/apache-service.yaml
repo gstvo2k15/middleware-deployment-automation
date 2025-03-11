@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: apache
+  namespace: middleware
 spec:
   selector:
     app: apache
