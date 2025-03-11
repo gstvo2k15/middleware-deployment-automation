@@ -1,21 +1,76 @@
 # Middleware Kubernetes Deployment
 
-Este proyecto gestiona la migración de middleware a Kubernetes con:
-- Helm Charts para Nginx, Apache, Tomcat, JBoss, WebLogic
-- Ingress Nginx y MetalLB para gestión de tráfico
-- Despliegue automatizado con ArgoCD y Jenkins
-- Monitoreo con Prometheus, Grafana y Loki
-- Certificados SSL con Let's Encrypt
+This project manages the migration of middleware to Kubernetes, including:
+- Helm Charts for Nginx, Apache, Tomcat, JBoss, and WebLogic
+- Ingress Nginx and MetalLB for traffic management
+- Automated deployment with ArgoCD and Jenkins
+- Monitoring with Prometheus, Grafana, and Loki
+- SSL Certificates with Let's Encrypt
 
-## Instalación
-1. Desplegar Ingress Nginx y MetalLB
-2. Aplicar los Helm Charts
-3. Configurar ArgoCD y Jenkins
-4. Configurar monitoreo
+## Installation
 
-Ejemplo:
+### 1️⃣ Deploy Ingress Nginx and MetalLB
 ```sh
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
 kubectl apply -f manifests/metallb-config.yaml
-kubectl apply -f manifests/ingress.yaml
-helm install tomcat charts/tomcat-chart/
 ```
+
+### 2️⃣ Install Cert-Manager and Configure Let's Encrypt
+```sh
+kubectl create namespace cert-manager
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+kubectl create secret generic duckdns-api-key   --namespace cert-manager   --from-literal=token='YOUR_DUCKDNS_TOKEN'
+kubectl apply -f manifests/cert-manager.yaml
+kubectl apply -f manifests/certificate.yaml
+```
+
+### 3️⃣ Apply Ingress Configuration
+```sh
+kubectl apply -f manifests/ingress.yaml
+```
+
+### 4️⃣ Install Middleware Helm Charts
+```sh
+helm install nginx charts/nginx-chart/
+helm install apache charts/apache-chart/
+helm install tomcat charts/tomcat-chart/
+helm install jboss charts/jboss-chart/
+helm install weblogic charts/weblogic-chart/
+```
+
+### 5️⃣ Set Up ArgoCD for Automated Deployment
+```sh
+kubectl apply -f deployment-pipelines/argocd/app.yaml
+```
+
+### 6️⃣ Configure Monitoring with Prometheus and Grafana
+```sh
+kubectl apply -f monitoring/prometheus-grafana.yaml
+kubectl apply -f monitoring/loki.yaml
+```
+
+## Accessing Middleware Services
+
+### Web Middleware (Nginx & Apache):
+- [https://nginx.helmgolmolab.duckdns.org](https://nginx.helmgolmolab.duckdns.org)
+- [https://apache.helmgolmolab.duckdns.org](https://apache.helmgolmolab.duckdns.org)
+
+### Application Servers:
+- [https://tomcat.helmgolmolab.duckdns.org](https://tomcat.helmgolmolab.duckdns.org)
+- [https://jboss.helmgolmolab.duckdns.org](https://jboss.helmgolmolab.duckdns.org)
+- [https://weblogic.helmgolmolab.duckdns.org](https://weblogic.helmgolmolab.duckdns.org)
+
+Ensure that your `duckdns.org` subdomains are correctly updated with your cluster's IP.
+
+## Verify Deployments
+Check if all services are running correctly:
+```sh
+kubectl get all -A
+kubectl describe certificate -A
+kubectl get secrets -n cert-manager
+kubectl get ingress
+```
+
+## Notes
+- If using a **private network (VirtualBox, Proxmox, etc.)**, ensure `dns01` validation is used.
+- If using a **public IP**, `http01` validation via Ingress Nginx is also possible.
