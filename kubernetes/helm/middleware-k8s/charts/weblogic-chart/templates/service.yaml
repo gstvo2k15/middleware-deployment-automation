@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weblogic-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: weblogic
+  ports:
+    - protocol: TCP
+      port: 7001
+      targetPort: 7001
+  type: {{ .Values.service.type }}

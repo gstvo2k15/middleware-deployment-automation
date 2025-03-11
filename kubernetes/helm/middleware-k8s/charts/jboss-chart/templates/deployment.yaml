@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-jboss
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: jboss
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: jboss
+  template:
+    metadata:
+      labels:
+        app: jboss
+    spec:
+      containers:
+        - name: jboss
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080

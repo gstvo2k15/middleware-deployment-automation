@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-weblogic
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: weblogic
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: weblogic
+  template:
+    metadata:
+      labels:
+        app: weblogic
+    spec:
+      containers:
+        - name: weblogic
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 7001
