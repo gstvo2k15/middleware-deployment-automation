@@ -10,24 +10,13 @@ image:
 service:
   name: tomcat-service
   type: ClusterIP
-  port: 8080
+  port: 80
 
 ingress:
   enabled: true
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-  hosts:
-    - host: tomcat.helmgolmolab.duckdns.org
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: tomcat-service
-              port:
-                number: 8080
+  host: tomcat.helmgolmolab.duckdns.org
   tls:
-    - hosts:
-        - tomcat.helmgolmolab.duckdns.org
-      secretName: wildcard-duckdns-tls
+    - secretName: wildcard-duckdns-tls

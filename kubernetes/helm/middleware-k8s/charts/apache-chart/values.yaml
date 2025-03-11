@@ -3,12 +3,12 @@ namespace: middleware
 replicaCount: 2
 
 image:
-  repository: httpd
+  repository: nginx
   tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
-  name: apache-service
+  name: nginx-service
   type: ClusterIP
   port: 80
 
@@ -17,9 +17,6 @@ ingress:
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-  hosts:
-    - apache.helmgolmolab.duckdns.org
+  host: nginx.helmgolmolab.duckdns.org
   tls:
-    - hosts:
-        - apache.helmgolmolab.duckdns.org
-      secretName: wildcard-duckdns-tls
+    - secretName: wildcard-duckdns-tls

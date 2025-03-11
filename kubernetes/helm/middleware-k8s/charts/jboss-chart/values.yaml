@@ -3,12 +3,12 @@ namespace: middleware
 replicaCount: 2
 
 image:
-  repository: jboss/wildfly
+  repository: httpd
   tag: "latest"
   pullPolicy: IfNotPresent
 
 service:
-  name: jboss-service
+  name: apache-service
   type: ClusterIP
   port: 8080
 
@@ -17,17 +17,6 @@ ingress:
   ingressClassName: nginx
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production
-  hosts:
-    - host: jboss.helmgolmolab.duckdns.org
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: jboss-service
-              port:
-                number: 8080
+  host: apache.helmgolmolab.duckdns.org
   tls:
-    - hosts:
-        - jboss.helmgolmolab.duckdns.org
-      secretName: wildcard-duckdns-tls
+    - secretName: wildcard-duckdns-tls
