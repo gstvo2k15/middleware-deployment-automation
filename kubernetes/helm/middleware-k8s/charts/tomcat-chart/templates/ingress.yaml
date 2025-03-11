@@ -12,17 +12,19 @@ spec:
         {{- range .Values.ingress.hosts }}
         - {{ .host }}
         {{- end }}
-      secretName: {{ (index .Values.ingress.tls 0 "secretName") | default "wildcard-duckdns-tls" }}
+      secretName: {{ .Values.ingress.tls | first | default "wildcard-duckdns-tls" }}
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host }}
       http:
         paths:
-          - path: {{ .paths.0.path | default "/" }}
-            pathType: {{ .paths.0.pathType | default "Prefix" }}
+          {{- range .paths }}
+          - path: {{ .path | default "/" }}
+            pathType: {{ .pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ .paths.0.backend.service.name | default $.Values.service.name }}
+                name: {{ .backend.service.name | default $.Values.service.name }}
                 port:
-                  number: {{ .paths.0.backend.service.port.number | default $.Values.service.port }}
+                  number: {{ .backend.service.port.number | default $.Values.service.port }}
+          {{- end }}
     {{- end }}
