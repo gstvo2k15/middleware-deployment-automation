@@ -16,6 +16,26 @@
     mode: "0644"
   notify: Restart Nginx
 
+- name: Ensure SSL directory exists
+  ansible.builtin.file:
+    path: /etc/nginx/ssl
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Generate self-signed SSL certificate
+  community.crypto.openssl_certificate:
+    path: /etc/nginx/ssl/nginx.crt
+    privatekey_path: /etc/nginx/ssl/nginx.key
+    provider: selfsigned
+  notify: Restart Nginx
+
+- name: Ensure correct permissions for SSL keys
+  ansible.builtin.file:
+    path: /etc/nginx/ssl/nginx.key
+    mode: "0600"
+
 - name: Deploy SSL configuration
   ansible.builtin.template:
     src: "ssl.conf.j2"
