@@ -1,0 +1,17 @@
+server {
+    listen {{ nginx_ssl_port }} ssl;
+    server_name _;
+
+    ssl_certificate {{ nginx_ssl_certificate }};
+    ssl_certificate_key {{ nginx_ssl_certificate_key }};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    location / {
+        proxy_pass http://tomcat_backend;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+    }
+}
