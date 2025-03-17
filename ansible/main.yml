@@ -1,0 +1,7 @@
+---
+- name: Configure Dynamic motd
+  hosts: all
+  become: true
+
+  roles:
+    - motd

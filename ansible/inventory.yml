@@ -1,0 +1,10 @@
+[ALL]
+server1 ansible_host=192.168.1.123
+server2 ansible_host=192.168.1.124
+
+[apache]
+server1 ansible_host=rocky9vm03
+
+[nginx]
+server2 ansible_host=rocky9vm04
+
