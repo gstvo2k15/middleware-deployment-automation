@@ -8,4 +8,4 @@
     - { role: tomcat, tags: ["tomcat"] }
     #- { role: nginx, tags: ["nginx"] }
     #- { role: tomcat-hardening, tags: ["tomcat-hardening"] }
-    #- { role: nginx-revproxy, tags: ["revproxy"] }            
+    #- { role: nginx-revproxy, tags: ["revproxy"] }

@@ -2,21 +2,21 @@
   ansible.builtin.systemd:
     name: firewalld
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Open firewall ports for Tomcat (HTTP)
   ansible.posix.firewalld:
     port: 8080/tcp
-    permanent: yes
+    permanent: true
     state: enabled
-    immediate: yes
+    immediate: true
 
 - name: Open firewall ports for Tomcat (HTTPS)
   ansible.posix.firewalld:
     port: 8443/tcp
-    permanent: yes
+    permanent: true
     state: enabled
-    immediate: yes
+    immediate: true
 
 - name: Deploy Tomcat configuration file
   ansible.builtin.template:
@@ -47,6 +47,6 @@
 - name: Enable and start Tomcat service
   ansible.builtin.systemd:
     name: tomcat
-    enabled: yes
+    enabled: true
     state: started
-    daemon_reload: yes
+    daemon_reload: true

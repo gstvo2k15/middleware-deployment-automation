@@ -1,5 +1,5 @@
 - name: Ensure Java is installed (RHEL-based)
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: java-11-openjdk-devel
     state: present
   when: ansible_os_family == "RedHat"
@@ -15,7 +15,7 @@
     group: "{{ tomcat_group }}"
     home: "{{ tomcat_install_dir }}"
     shell: /bin/false
-    system: yes
+    system: true
 
 - name: Ensure Tomcat installation directory exists
   ansible.builtin.file:
@@ -41,7 +41,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: "{{ tomcat_install_dir }}"
-    remote_src: yes
+    remote_src: true
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
   when: not tomcat_check.stat.exists
@@ -52,4 +52,4 @@
     state: directory
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
-    recurse: yes
+    recurse: true
