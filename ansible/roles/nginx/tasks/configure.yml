@@ -28,7 +28,7 @@
   community.crypto.x509_certificate:
     path: "{{ nginx_ssl_certificate }}"
     privatekey_path: "{{ nginx_ssl_certificate_key }}"
-    csr_path: /etc/nginx/ssl/nginx.csr
+    csr_path: "{{ nginx_ssl_csr }}"
     provider: selfsigned
     owner: nginx
     group: nginx

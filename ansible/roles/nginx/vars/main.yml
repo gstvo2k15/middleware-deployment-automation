@@ -7,3 +7,4 @@ nginx_tomcat_servers:
 
 nginx_ssl_certificate: "/etc/nginx/ssl/nginx.crt"
 nginx_ssl_certificate_key: "/etc/nginx/ssl/nginx.key"
+nginx_ssl_csr: "/etc/nginx/ssl/nginx.csr"

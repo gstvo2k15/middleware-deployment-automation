@@ -3,8 +3,8 @@
     msg: "This role is only meant to run on nginx1 (192.168.1.121)"
   when: ansible_host != "192.168.1.121"
 
-- name: Include install tasks
-  ansible.builtin.import_tasks: install.yml
+#- name: Include install tasks
+#  ansible.builtin.import_tasks: install.yml
 
 - name: Include configure tasks
-  ansible.builtin.import_tasks: configure.yml 
+  ansible.builtin.import_tasks: configure.yml
