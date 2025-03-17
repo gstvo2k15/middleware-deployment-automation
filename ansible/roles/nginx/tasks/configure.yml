@@ -25,10 +25,14 @@
     mode: "0755"
 
 - name: Generate self-signed SSL certificate
-  community.crypto.openssl_certificate:
+  community.crypto.x509_certificate:
     path: /etc/nginx/ssl/nginx.crt
     privatekey_path: /etc/nginx/ssl/nginx.key
+    csr_path: /etc/nginx/ssl/nginx.csr
     provider: selfsigned
+    owner: root
+    group: root
+    mode: "0644"
   notify: Restart Nginx
 
 - name: Ensure correct permissions for SSL keys
