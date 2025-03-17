@@ -16,64 +16,64 @@
     mode: "0644"
   notify: Restart Nginx
 
-- name: Ensure SSL directory exists
-  ansible.builtin.file:
-    path: /etc/nginx/ssl
-    state: directory
-    owner: nginx
-    group: nginx
-    mode: "0755"
-
-- name: Install Python dependencies for Python 3.12 are installed
-  ansible.builtin.dnf:
-    name:
-      - python3.12-pip
-      - python3.12-setuptools
-    state: present
-
-- name: Ensure pip is installed and upgraded for Python 3.12
-  ansible.builtin.command:
-    cmd: "/usr/bin/python3.12 -m ensurepip --upgrade"
-  changed_when: false
-  ignore_errors: true
-
-- name: Upgrade pip and setuptools for Python 3.12
-  ansible.builtin.command:
-    cmd: "/usr/bin/python3.12 -m pip install --upgrade pip setuptools"
-  changed_when: false
-  ignore_errors: true
-
-- name: Ensure Python modules are installed for Python 3.12
-  ansible.builtin.pip:
-    executable: /usr/bin/python3.12 -m pip
-    name: "{{ item }}"
-    state: present
-  loop:
-    - packaging
-    - cryptography
-  when: ansible_python.executable is defined
-
-- name: Generate self-signed SSL certificate
-  community.crypto.x509_certificate:
-    path: "{{ nginx_ssl_certificate }}"
-    privatekey_path: "{{ nginx_ssl_certificate_key }}"
-    csr_path: "{{ nginx_ssl_csr }}"
-    provider: selfsigned
-    owner: nginx
-    group: nginx
-    mode: "0600"
-  notify: Restart Nginx
-
-- name: Ensure correct permissions for SSL keys
-  ansible.builtin.file:
-    path: "{{ nginx_ssl_certificate_key }}"
-    mode: "0600"
-
-- name: Deploy SSL configuration
-  ansible.builtin.template:
-    src: "ssl.conf.j2"
-    dest: "/etc/nginx/conf.d/ssl.conf"
-    owner: root
-    group: root
-    mode: "0644"
-  notify: Restart Nginx
+#- name: Ensure SSL directory exists
+#  ansible.builtin.file:
+#    path: /etc/nginx/ssl
+#    state: directory
+#    owner: nginx
+#    group: nginx
+#    mode: "0755"
+#
+#- name: Install Python dependencies for Python 3.12 are installed
+#  ansible.builtin.dnf:
+#    name:
+#      - python3.12-pip
+#      - python3.12-setuptools
+#    state: present
+#
+#- name: Ensure pip is installed and upgraded for Python 3.12
+#  ansible.builtin.command:
+#    cmd: "/usr/bin/python3.12 -m ensurepip --upgrade"
+#  changed_when: false
+#  ignore_errors: true
+#
+#- name: Upgrade pip and setuptools for Python 3.12
+#  ansible.builtin.command:
+#    cmd: "/usr/bin/python3.12 -m pip install --upgrade pip setuptools"
+#  changed_when: false
+#  ignore_errors: true
+#
+#- name: Ensure Python modules are installed for Python 3.12
+#  ansible.builtin.pip:
+#    executable: /usr/bin/python3.12 -m pip
+#    name: "{{ item }}"
+#    state: present
+#  loop:
+#    - packaging
+#    - cryptography
+#  when: ansible_python.executable is defined
+#
+#- name: Generate self-signed SSL certificate
+#  community.crypto.x509_certificate:
+#    path: "{{ nginx_ssl_certificate }}"
+#    privatekey_path: "{{ nginx_ssl_certificate_key }}"
+#    csr_path: "{{ nginx_ssl_csr }}"
+#    provider: selfsigned
+#    owner: nginx
+#    group: nginx
+#    mode: "0600"
+#  notify: Restart Nginx
+#
+#- name: Ensure correct permissions for SSL keys
+#  ansible.builtin.file:
+#    path: "{{ nginx_ssl_certificate_key }}"
+#    mode: "0600"
+#
+#- name: Deploy SSL configuration
+#  ansible.builtin.template:
+#    src: "ssl.conf.j2"
+#    dest: "/etc/nginx/conf.d/ssl.conf"
+#    owner: root
+#    group: root
+#    mode: "0644"
+#  notify: Restart Nginx
