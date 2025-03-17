@@ -20,24 +20,24 @@
   ansible.builtin.file:
     path: /etc/nginx/ssl
     state: directory
-    owner: root
-    group: root
+    owner: nginx
+    group: nginx
     mode: "0755"
 
 - name: Generate self-signed SSL certificate
   community.crypto.x509_certificate:
-    path: /etc/nginx/ssl/nginx.crt
-    privatekey_path: /etc/nginx/ssl/nginx.key
+    path: "{{ nginx_ssl_certificate }}"
+    privatekey_path: "{{ nginx_ssl_certificate_key }}"
     csr_path: /etc/nginx/ssl/nginx.csr
     provider: selfsigned
-    owner: root
-    group: root
-    mode: "0644"
+    owner: nginx
+    group: nginx
+    mode: "0600"
   notify: Restart Nginx
 
 - name: Ensure correct permissions for SSL keys
   ansible.builtin.file:
-    path: /etc/nginx/ssl/nginx.key
+    path: "{{ nginx_ssl_certificate_key }}"
     mode: "0600"
 
 - name: Deploy SSL configuration
