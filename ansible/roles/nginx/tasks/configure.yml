@@ -24,6 +24,12 @@
     group: nginx
     mode: "0755"
 
+- name: Ensure Python cryptography module is installed
+  ansible.builtin.pip:
+    name: cryptography
+    state: present
+  become: true
+
 - name: Generate self-signed SSL certificate
   community.crypto.x509_certificate:
     path: "{{ nginx_ssl_certificate }}"
