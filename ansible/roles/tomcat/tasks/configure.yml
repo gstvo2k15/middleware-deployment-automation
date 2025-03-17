@@ -1,0 +1,44 @@
+- name: Ensure firewalld is running and enabled
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Open firewall ports for Tomcat (HTTP)
+  ansible.posix.firewalld:
+    port: 8080/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Open firewall ports for Tomcat (HTTPS)
+  ansible.posix.firewalld:
+    port: 8443/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+- name: Deploy Tomcat configuration file
+  ansible.builtin.template:
+    src: "server.xml.j2"
+    dest: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: "0644"
+  notify: Restart Tomcat
+
+- name: Deploy Tomcat systemd service file
+  ansible.builtin.template:
+    src: "tomcat.service.j2"
+    dest: "/etc/systemd/system/tomcat.service"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd
+
+- name: Enable and start Tomcat service
+  ansible.builtin.systemd:
+    name: tomcat
+    enabled: yes
+    state: started
+    daemon_reload: yes

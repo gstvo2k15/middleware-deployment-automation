@@ -1,0 +1,55 @@
+- name: Ensure Java is installed (RHEL-based)
+  ansible.builtin.yum:
+    name: java-11-openjdk-devel
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure group exists
+  ansible.builtin.group:
+    name: "{{ tomcat_group }}"
+    state: present
+
+- name: Ensure user exists
+  ansible.builtin.user:
+    name: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    home: "{{ tomcat_install_dir }}"
+    shell: /bin/false
+    system: yes
+
+- name: Ensure Tomcat installation directory exists
+  ansible.builtin.file:
+    path: "{{ tomcat_install_dir }}"
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: "0755"
+
+- name: Check if Tomcat is already installed
+  ansible.builtin.stat:
+    path: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}"
+  register: tomcat_check
+
+- name: Download Tomcat
+  ansible.builtin.get_url:
+    url: "{{ tomcat_url }}"
+    dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    mode: "0644"
+  when: not tomcat_check.stat.exists
+
+- name: Extract Tomcat archive
+  ansible.builtin.unarchive:
+    src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ tomcat_install_dir }}"
+    remote_src: yes
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+  when: not tomcat_check.stat.exists
+
+- name: Ensure correct permissions on Tomcat directory
+  ansible.builtin.file:
+    path: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}"
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    recurse: yes

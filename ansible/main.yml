@@ -5,3 +5,7 @@
 
   roles:
     - motd
+    - tomcat-install
+    #- nginx-install
+    #- tomcat-hardening
+    #- nginx-revproxy

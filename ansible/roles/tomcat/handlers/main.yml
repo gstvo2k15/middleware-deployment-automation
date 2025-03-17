@@ -1,0 +1,11 @@
+---
+- name: Restart Tomcat
+  ansible.builtin.systemd:
+    name: tomcat
+    state: restarted
+    daemon_reload: yes
+  when: ansible_service_mgr == "systemd"
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="{{ tomcat_shutdown_port }}" shutdown="SHUTDOWN">
+
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" />
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+    <GlobalNamingResources>
+        <Resource name="UserDatabase" auth="Container"
+                  type="org.apache.catalina.UserDatabase"
+                  description="User database that can be updated and saved"
+                  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                  pathname="conf/tomcat-users.xml" />
+    </GlobalNamingResources>
+
+    <Service name="Catalina">
+
+        <Connector port="{{ tomcat_http_port }}"
+                   protocol="HTTP/1.1"
+                   address="{{ tomcat_bind_address }}"
+                   connectionTimeout="20000"
+                   redirectPort="{{ tomcat_https_port }}"
+                   maxThreads="{{ tomcat_max_threads }}"
+                   minSpareThreads="10"
+                   enableLookups="false"
+                   disableUploadTimeout="true"
+                   acceptCount="100"
+                   URIEncoding="UTF-8"
+                   compression="on"
+                   compressibleMimeType="text/html,text/xml,text/plain,text/css,text/javascript,application/json,application/javascript" />
+
+        <Engine name="Catalina" defaultHost="{{ tomcat_hostname }}">
+            <Realm className="org.apache.catalina.realm.LockOutRealm">
+                <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+                       resourceName="UserDatabase"/>
+            </Realm>
+
+            <Host name="{{ tomcat_hostname }}" appBase="webapps"
