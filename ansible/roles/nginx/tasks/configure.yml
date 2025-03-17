@@ -31,6 +31,16 @@
       - python3.12-setuptools
     state: present
 
+- name: Ensure pip is installed and upgraded for Python 3.12
+  ansible.builtin.command:
+    cmd: "/usr/bin/python3.12 -m ensurepip --upgrade"
+  changed_when: false
+
+- name: Upgrade pip and setuptools for Python 3.12
+  ansible.builtin.command:
+    cmd: "/usr/bin/python3.12 -m pip install --upgrade pip setuptools"
+  changed_when: false
+
 - name: Ensure Python modules are installed for Python 3.12
   ansible.builtin.pip:
     executable: /usr/bin/python3.12 -m pip
