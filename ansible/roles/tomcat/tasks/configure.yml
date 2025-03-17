@@ -27,6 +27,14 @@
     mode: "0644"
   notify: Restart Tomcat
 
+- name: Ensure correct permissions for catalina.out log file
+  ansible.builtin.file:
+    path: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}/logs/catalina.out"
+    state: touch
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    mode: "0644"
+
 - name: Deploy Tomcat systemd service file
   ansible.builtin.template:
     src: "tomcat.service.j2"
