@@ -7,4 +7,3 @@ server1 ansible_host=rocky9vm03
 
 [nginx]
 server2 ansible_host=rocky9vm04
-

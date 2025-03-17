@@ -1,5 +1,6 @@
 ---
 tomcat_version: "9.0.102"
+tomcat_url: "https://dlcdn.apache.org/tomcat/tomcat-9/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
 tomcat_install_dir: "/opt/tomcat"
 tomcat_user: "tomcat"
 tomcat_group: "tomcat"
