@@ -1,11 +1,11 @@
 ---
-- name: Configure Dynamic motd
+- name: Configure VMs for middleware deployments
   hosts: all
   become: true
 
   roles:
     - { role: motd, tags: ["motd"] }
     - { role: tomcat, tags: ["tomcat"] }
-    # - { role: nginx, tags: ["nginx"] }
+    - { role: nginx, tags: ["nginx"], when: ansible_host == "192.168.1.121" }
     # - { role: tomcat-hardening, tags: ["tomcat-hardening"] }
     # - { role: nginx-revproxy, tags: ["revproxy"] }
