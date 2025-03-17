@@ -24,11 +24,13 @@
     group: nginx
     mode: "0755"
 
-- name: Ensure Python cryptography module is installed
+- name: Ensure required Python modules are installed
   ansible.builtin.pip:
-    name: cryptography
+    name: "{{ item }}"
     state: present
-  become: true
+  loop:
+    - packaging
+    - cryptography
 
 - name: Generate self-signed SSL certificate
   community.crypto.x509_certificate:
