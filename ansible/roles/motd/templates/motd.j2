@@ -2,8 +2,8 @@
 
 System information:
 
-OS: {{ ansible_distribution }} {{ ansible_distribution_version }}
-Hostname: {{ ansible_hostname }}
-IP Address: {{ ansible_default_ipv4.address }}
+OS: {{ ansible_distribution }} {{ motd_version }}
+Hostname: {{ motd_host }}
+IP Address: {{ motd_ipv4 }}
 
 {{ custom_message | default('') }}
