@@ -38,3 +38,11 @@
             </Realm>
 
             <Host name="{{ tomcat_hostname }}" appBase="webapps"
+                  unpackWARs="true" autoDeploy="true">
+                <Valve className="org.apache.catalina.valves.AccessLogValve"
+                       directory="logs" prefix="access_log" suffix=".txt"
+                       pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+            </Host>
+        </Engine>
+    </Service>
+</Server>
