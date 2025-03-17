@@ -35,11 +35,13 @@
   ansible.builtin.command:
     cmd: "/usr/bin/python3.12 -m ensurepip --upgrade"
   changed_when: false
+  ignore_errors: true
 
 - name: Upgrade pip and setuptools for Python 3.12
   ansible.builtin.command:
     cmd: "/usr/bin/python3.12 -m pip install --upgrade pip setuptools"
   changed_when: false
+  ignore_errors: true
 
 - name: Ensure Python modules are installed for Python 3.12
   ansible.builtin.pip:
@@ -49,6 +51,7 @@
   loop:
     - packaging
     - cryptography
+  when: ansible_python.executable is defined
 
 - name: Generate self-signed SSL certificate
   community.crypto.x509_certificate:
