@@ -16,6 +16,26 @@
     mode: "0644"
   notify: Restart Nginx
 
+- name: Ensure firewalld is running and enabled
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Open firewall ports for Nginx (HTTP)
+  ansible.posix.firewalld:
+    port: 80/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+
+- name: Open firewall ports for Nginx (HTTPS)
+  ansible.posix.firewalld:
+    port: 443/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+
 #- name: Ensure SSL directory exists
 #  ansible.builtin.file:
 #    path: /etc/nginx/ssl
